@@ -15,6 +15,10 @@
 
 И включаем там пункты `Automatic ESLint configuration` и `Run eslint --fix on save`
 
+### Запуск Eslint
+
+`yarn lint`
+
 ### Описание структуры проекта
 
 ```
