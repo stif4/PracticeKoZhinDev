@@ -1,13 +1,13 @@
 import React from 'react';
-import IndexPage from './routes/IndexPage';
+import Layout from './shared/Layout/Layout';
 
 import './style/index.scss';
 
 function App() {
     return (
-        <div>
-            <IndexPage />
-        </div>
+        <>
+            <Layout />
+        </>
     );
 }
 

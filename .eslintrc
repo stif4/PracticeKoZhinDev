@@ -1,7 +1,6 @@
 {
     "extends": "@steroidsjs/eslint-config",
     "rules": {
-      "@typescript-eslint/ban-ts-comment": "off",
       "no-undef": "off",
       "no-redeclare": "off",
       "react/no-unused-prop-types": "off",
