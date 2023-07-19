@@ -41,9 +41,11 @@ ui - глупые компоненты: кнопки, карточки, инпу
         Button
             Button.tsx
             Button.scss
+            index.ts
         Input
             Input.tsx
             Input.scss
+            index.ts
 
 shared - общие компоненты, к примеру Layout - оболочка для страниц.
 
@@ -60,7 +62,7 @@ Application.tsx - основной компонент приложения.
 
 .eslintrc - правила стилизации
 package.json - описание зависимостей
-tsconfig.json - настройки тайпскрипта
+tsconfig.json - настройки typescript
 yarn.lock - фиксированные версии зависимостей
 .env.sample - пример файла .env
 .env - содержит некоторые пользовательские переменные среды, к примеру url для бэкенда:
