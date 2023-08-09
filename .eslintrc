@@ -1,10 +1,11 @@
 {
     "extends": "@steroidsjs/eslint-config",
     "rules": {
-      "no-undef": "off",
-      "no-redeclare": "off",
-      "react/no-unused-prop-types": "off",
-      "react/default-props-match-prop-types": "off",
-      "react/sort-comp": "off"
+        "no-undef": "off",
+        "no-redeclare": "off",
+        "react/no-unused-prop-types": "off",
+        "react/default-props-match-prop-types": "off",
+        "react/sort-comp": "off",
+        // "peerDependencies": "true"
     }
-  }
+}
