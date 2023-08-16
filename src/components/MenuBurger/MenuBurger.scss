@@ -1,0 +1,96 @@
+.MenuBurger {
+    position: fixed;
+    left: -100%;
+    width: 100%;
+    height: calc(100% - 52px);
+    transition: left 1s;
+
+    &_active {
+        left: 0%;
+    }
+
+    &__container {
+        margin-top: 52px;
+        width: 100%;
+        height: 100%;
+        background-color: var(--base-white-color);
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__main {
+        flex-grow: 1;
+        flex-shrink: 0;
+    }
+
+    &__bottom {
+        flex-shrink: 0;
+        flex-grow: 0;
+        margin-left: 16px;
+        margin-bottom: 16px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        margin-top: 32px;
+        margin-left: 16px;
+    }
+
+    &__list > a:not(:last-child) {
+        margin-bottom: 16px;
+    }
+
+    &__icon {
+        margin-right: 8px;
+        width: 24px;
+        height: 24px;
+    }
+
+    &__text {
+        size: var(--text-base-size);
+        color: var(--base-gray-color);
+        font-weight: 400;
+        line-height: 24px;
+    }
+
+    &__logOut {
+        padding: 12px;
+        font-weight: 500;
+        font-size: var(--post-base-text-size);
+        line-height: 24px;
+        color: var(--status-danger-color);
+        position: relative;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        gap: 8px;
+        cursor: pointer;
+
+        &_active {
+            & > img {
+                filter: invert(13%) sepia(202%) saturate(1177%)
+                    hue-rotate(228deg) brightness(64%) contrast(213%);
+            }
+            & > p {
+                color: var(--main-darck-color);
+            }
+        }
+    }
+
+    &__decorLine {
+        top: -16px;
+        margin-left: -16px;
+        width: 98.5%;
+        position: absolute;
+        border: 1px solid var(--base-black-10per-color);
+    }
+}

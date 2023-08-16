@@ -5,7 +5,9 @@
         "no-redeclare": "off",
         "react/no-unused-prop-types": "off",
         "react/default-props-match-prop-types": "off",
-        "react/sort-comp": "off",
-        // "peerDependencies": "true"
+        "react/sort-comp": "off"
+
+        /* пока так пусть будет*/
+        //"peerDependencies": "false"
     }
 }

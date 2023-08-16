@@ -1,6 +1,14 @@
 import React from 'react';
 import {createBrowserRouter} from 'react-router-dom';
+import CheckBox from '../components/CheckBox/CheckBox';
 import Layout from '../shared/Layout';
+
+const handleClick = () => {};
+const onKeyPressHandler = () => {};
+
+const PATH_ICON_FILL = '/icons/bigcHeckBox.svg';
+const PATH_ICON_EMPTY = '/icons/bigCheckBoxEmpty.svg';
+const pathIcons = [PATH_ICON_EMPTY, PATH_ICON_FILL];
 
 export const router = createBrowserRouter([
     {
@@ -12,7 +20,17 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <div>news!</div>,
+                        element: (
+                            <CheckBox
+                                onClick={handleClick}
+                                value={1}
+                                label="asf"
+                                id="1123"
+                                tabIndex={-1}
+                                onKeyPressHandler={onKeyPressHandler}
+                                pathIcons={pathIcons}
+                            />
+                        ),
                     },
                     {
                         path: 'create',

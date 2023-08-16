@@ -15,9 +15,11 @@ export default function Layout() {
 
     return (
         <div className="Layout">
-            <div>
+            <div className="Layout__container">
                 <Header />
-                <Outlet />
+                <div className="Layout__content">
+                    <Outlet />
+                </div>
             </div>
         </div>
     );

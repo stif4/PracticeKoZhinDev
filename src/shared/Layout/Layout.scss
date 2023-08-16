@@ -1,2 +1,16 @@
 .Layout {
+    height: 100%;
+    width: 100%;
+    font-family: 'Nunito';
+    background: var(--layout-color);
+
+    &__container {
+        height: 100%;
+        width: 360px;
+        position: relative;
+    }
+
+    &__content {
+        padding-top: 52px;
+    }
 }
