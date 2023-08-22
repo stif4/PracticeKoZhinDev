@@ -1,0 +1,39 @@
+.FileShow{
+	&__container{
+		display: flex;
+		padding: 8px;
+		justify-content: space-between;
+		align-items: center;
+		border-radius: var(--base-border-radius);
+		box-shadow: inset 0px 0px 0px 1px var(--gray-light-color);
+	}
+
+	&__label{
+		line-height: 24px;
+        font-size: var(--text-base-size);
+        color: var(--text-gray-darck-color);
+        margin-bottom: 4px;
+	}
+
+	&__img{
+		display: flex;
+		align-items: center;
+	}
+
+	&__imgLoaded{
+		width: 48px;
+		height: 48px;
+		border-radius: var(--small-border-radius);
+	}
+
+	&__text{
+		font-size: var(--text-medium-size);
+		color: var(--text-link-defualt-color);
+		margin-left: 16px;
+		line-height: 24px;
+	}
+
+	&__menu{
+
+	}
+}

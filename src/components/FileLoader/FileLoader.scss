@@ -1,0 +1,14 @@
+.FileLoader {
+    &__container {
+    }
+    &__input {
+        opacity: 0;
+        height: 0px;
+        width: 0px;
+        line-height: 0;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+		display: none;
+    }
+}

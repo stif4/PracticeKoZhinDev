@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from 'react-router-dom';
 import Button from '../Button/Button';
 import MenuBurger from '../MenuBurger/MenuBurger';
 import './Header.scss';
@@ -34,6 +35,8 @@ const MENU_ITEMS: IMenuArrayItem[] = [
 const PATH_MENU_ACTIVE = '/icons/сrossMenu.svg';
 const PATH_MENU_NOT_ACTIVE = '/icons/menu.svg';
 
+const BUTTON_CLASS_NAME = 'Button__main Button__main_empty Button__main_empty_colorGray Button__main_empty_colorGray_small';
+
 export default function Header() {
     // const handleChange = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     //     console.log(e.currentTarget.tabIndex);
@@ -64,11 +67,13 @@ export default function Header() {
         }
 
         return (
-            <Button
-                className="Button Button_empty Button_empty_colorGray Button_empty_colorGray_small"
-                label="Войти"
-                onClick={handleChange}
-            />
+            <NavLink to="/auth">
+                <Button
+                    className={BUTTON_CLASS_NAME}
+                    label="Войти"
+                    onClick={handleChange}
+                />
+            </NavLink>
         );
     };
 

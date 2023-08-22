@@ -6,20 +6,20 @@ interface ITab {
     className: string;
     onKeyPressHandler: () => void;
     label: string;
-    tabIndex: number;
     isActive: boolean;
+    id: string;
 }
 
-const TAB_ACTIVE = 'Button_medium Button_medium_colorDarck';
-const TAB_NOT_ACTIVE = 'Button_empty Button_empty_colorGray Button_empty_colorGray_medium';
+const TAB_ACTIVE = 'Button__main_medium Button__main_medium_colorDarck';
+const TAB_NOT_ACTIVE = 'Button__main_empty Button__main_empty_colorGray Button__main_empty_colorGray_medium';
 
 export default function Tab({
     onClick,
     className,
     onKeyPressHandler,
     label,
-    tabIndex,
     isActive,
+    id,
 }: ITab) {
     const classTab = isActive ? TAB_ACTIVE : TAB_NOT_ACTIVE;
 
@@ -30,7 +30,8 @@ export default function Tab({
             onClick={(event) => onClick(event)}
             aria-checked="false"
             role="checkbox"
-            tabIndex={tabIndex}
+            tabIndex={0}
+            id={id}
         >
             <Button
                 className={classTab}

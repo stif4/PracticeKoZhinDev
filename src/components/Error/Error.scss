@@ -1,0 +1,31 @@
+.Error {
+    &__container {
+		margin-bottom: 40px;
+        padding: 16px;
+        display: flex;
+        background-color: var(--status-light-danger-color);
+        border-radius: var(--base-border-radius);
+    }
+
+    &__img {
+        margin-right: 12px;
+        width: 24px;
+        height: 24px;
+    }
+
+    &__imgError {
+    }
+
+    &__text {
+        line-height: 22px;
+        font-size: var(--post-base-text-size);
+		color: var(--heading-title-color);
+		gap: 12px;
+    }
+
+    &__title {
+    }
+
+    &__message {
+    }
+}

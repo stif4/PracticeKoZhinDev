@@ -1,0 +1,27 @@
+.RegisterForm {
+    &__container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__input {
+        margin-bottom: 24px;
+    }
+
+    &__checkBox {
+        margin-bottom: 32px;
+    }
+
+    &__button {
+        margin-bottom: 40px;
+    }
+
+    &__fileLoader {
+        margin-bottom: 24px;
+    }
+
+    &__textArea {
+        margin-bottom: 32px;
+        flex: 1 0 128px;
+    }
+}

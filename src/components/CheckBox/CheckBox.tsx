@@ -2,27 +2,24 @@ import React from 'react';
 import './CheckBox.scss';
 
 interface ICheckBox {
-    onClick: () => void;
-    value: 0 | 1;
+    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    value: 'checked' | 'notChecked';
     label?: string;
-    id: string;
     onKeyPressHandler: () => void;
-    tabIndex: number;
     width?: string;
     height?: string;
-    pathIcons: string[];
+    pathsIcons: string[];
 }
 export default function CheckBox({
     onClick,
-    value,
     label,
-    tabIndex,
-    id,
     onKeyPressHandler,
     width,
     height,
-    pathIcons,
+    value,
+    pathsIcons,
 }: ICheckBox) {
+    const index = value === 'checked' ? 1 : 0;
     return (
         <div className="CheckBox">
             <div className="CheckBox__container">
@@ -31,19 +28,19 @@ export default function CheckBox({
                     style={{width, height}}
                     onClick={onClick}
                     role="button"
-                    tabIndex={tabIndex}
-                    id={id}
+                    tabIndex={0}
+                    id={value}
                     onKeyPress={onKeyPressHandler}
                 >
                     <img
                         className="CheckBox__img"
-                        src={pathIcons[value]}
+                        src={pathsIcons[index]}
                         alt="CheckBox"
                     />
                 </div>
 
                 <label
-                    htmlFor={id}
+                    htmlFor={value}
                     className="CheckBox__label"
                 >
                     {label}

@@ -17,9 +17,7 @@ export default function Layout() {
         <div className="Layout">
             <div className="Layout__container">
                 <Header />
-                <div className="Layout__content">
-                    <Outlet />
-                </div>
+                <Outlet />
             </div>
         </div>
     );

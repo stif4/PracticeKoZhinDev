@@ -1,36 +1,37 @@
 import React from 'react';
-import Button from '../Button/Button';
+import {NavLink} from 'react-router-dom';
+import {ILabelTab} from '../../pages/AuthPage/AuthPage';
 import Tab from './Tab';
 import './TabsChoice.scss';
 
 interface ITabsChoice {
-    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    labels: string[];
+    onChange: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    labels: ILabelTab[];
+    activeTab: string;
 }
 
-export default function TabsChoice({onClick, labels}: ITabsChoice) {
+export default function TabsChoice({onChange, labels, activeTab}: ITabsChoice) {
     const onKeyPressHandler = () => {};
-    const [activeTab, setIsActiveTab] = React.useState<number>(-1);
 
     return (
         <div className="TabsChoice">
             <div className="TabsChoice__container">
-                <Tab
-                    className="TabsChoice__tab"
-                    onClick={onClick}
-                    onKeyPressHandler={onKeyPressHandler}
-                    label={labels[0]}
-                    tabIndex={-1}
-                    isActive={activeTab === -1}
-                />
-                <Tab
-                    className="TabsChoice__tab"
-                    onClick={onClick}
-                    onKeyPressHandler={onKeyPressHandler}
-                    label={labels[1]}
-                    tabIndex={0}
-                    isActive={activeTab === 0}
-                />
+                {labels.map((label) => (
+                    <NavLink
+                        className="TabsChoice__link"
+                        to={label.path}
+                        key={label.id}
+                    >
+                        <Tab
+                            className="TabsChoice__tab"
+                            onClick={onChange}
+                            onKeyPressHandler={onKeyPressHandler}
+                            label={label.label}
+                            isActive={label.id === activeTab}
+                            id={label.id}
+                        />
+                    </NavLink>
+                ))}
             </div>
         </div>
     );
