@@ -1,10 +1,8 @@
 import React from 'react';
-import LoginForm from '../../components/Forms/LoginForm/LoginForm';
-import RegisterForm from '../../components/Forms/RegisterForm';
-import TabsChoice from '../../components/TabsChoice/TabsChoice';
+import LoginForm from '../../shared/Forms/LoginForm';
+import RegisterForm from '../../shared/Forms/RegisterForm';
+import TabsChoice from '../../ui/TabsChoice';
 import './AuthPage.scss';
-
-//interface IAuthPage {}
 
 export interface ILabelTab {
     id: string;

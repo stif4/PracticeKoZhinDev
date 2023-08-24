@@ -1,79 +1,60 @@
 import React from 'react';
 import {createBrowserRouter} from 'react-router-dom';
+import {
+    ROUTE_AUTH,
+    ROUTE_HOME,
+    ROUTE_NEWS,
+    ROUTE_REGISTER,
+    ROUTE_SUBSCRIPTIONS,
+    ROUTE_USER,
+} from '../constants/routes';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import Layout from '../shared/Layout';
 
-const handleClick = () => {};
-const onKeyPressHandler = () => {};
-
 export const router = createBrowserRouter([
     {
-        path: '/',
+        path: ROUTE_HOME,
         element: <Layout />,
         children: [
             {
-                path: 'news',
+                path: ROUTE_NEWS,
                 children: [
                     {
                         index: true,
                         element: <></>,
                     },
                     {
-                        path: 'create',
-                        element: <div>Создать пост!</div>,
-                    },
-                    {
                         path: ':id',
                         element: <div>Определенный пост!</div>,
                     },
-                    {
-                        path: ':id/edit',
-                        element: <div>Редактировать пост!</div>,
-                    },
                 ],
             },
             {
-                path: 'auth',
+                path: ROUTE_AUTH,
                 children: [
                     {
                         index: true,
-                        element: (
-                            <div className="Page Page__Auth_bg">
-                                <div className="Page__container">
-                                    <AuthPage />
-                                </div>
-                            </div>
-                        ),
+                        element: <AuthPage />,
                     },
                     {
-                        path: 'register',
-                        element: (
-                            <div className="Page Page__Auth_bg">
-                                <div className="Page__container">
-                                    <AuthPage />
-                                </div>
-                            </div>
-                        ),
+                        path: ROUTE_REGISTER,
+                        element: <AuthPage />,
                     },
                 ],
             },
             {
-                path: 'user',
+                path: ROUTE_USER,
                 children: [
                     {
                         index: true,
                         element: <div>profile!</div>,
                     },
                     {
-                        path: 'edit',
-                        element: <div>profile edit!</div>,
-                    },
-                    {
                         path: ':id',
                         element: <div>some user!</div>,
                     },
                     {
-                        path: 'subscriptions',
+                        path: ROUTE_SUBSCRIPTIONS,
                         element: <div>subscriptions!</div>,
                     },
                 ],

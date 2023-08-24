@@ -1,25 +1,17 @@
 .Layout {
-    //height: 100%;
+    background-color: var(--layout-color);
     width: 100%;
     font-family: 'Nunito';
 
+    &_bgWhite {
+        background-color: var(--base-white-color);
+    }
+    
     &__container {
-        //height: 100%;
         width: 360px;
         position: relative;
-    }
-}
-
-.Page {
-    background-color: var(--layout-color);
-
-    &__container {
         padding-top: 52px;
         padding-right: 20px;
         padding-left: 20px;
-    }
-
-    &__Auth_bg {
-        background-color: var(--base-white-color);
     }
 }
