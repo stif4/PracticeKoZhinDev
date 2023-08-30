@@ -1,6 +1,9 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import LoginForm from '../../shared/Forms/LoginForm';
 import RegisterForm from '../../shared/Forms/RegisterForm';
+import {getMe} from '../../store/features/userSlice';
+import {useAppSelector} from '../../store/store';
 import TabsChoice from '../../ui/TabsChoice';
 import './AuthPage.scss';
 
@@ -17,13 +20,21 @@ const LABELS: ILabelTab[] = [
 
 export default function AuthPage() {
     const [activeTab, setIsActiveTab] = React.useState<string>('login');
+    const user = useAppSelector(getMe());
+
+    const navigate = useNavigate();
+    React.useEffect(() => {
+        if (user) {
+            navigate('/');
+        }
+    }, [user]);
 
     const hendleChange = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const tab = e.currentTarget.id;
         setIsActiveTab(tab);
     };
 
-    const getForm = () => activeTab === 'login' ? <LoginForm /> : <RegisterForm />;
+    const getForm = () => (activeTab === 'login' ? <LoginForm /> : <RegisterForm />);
 
     return (
         <div className="AuthPage">

@@ -5,22 +5,14 @@ interface ICheckBox {
     onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     value: 'checked' | 'unchecked';
     label?: string;
-    onKeyPressHandler: () => void;
     width?: string;
     height?: string;
     pathsIcons: string[];
 }
 
-export default function CheckBox({
-    onClick,
-    label,
-    onKeyPressHandler,
-    width,
-    height,
-    value,
-    pathsIcons,
-}: ICheckBox) {
+export default function CheckBox({onClick, label, width, height, value, pathsIcons}: ICheckBox) {
     const index = value === 'checked' ? 1 : 0;
+    const onKeyPressHandler = () => {};
     return (
         <div className="CheckBox">
             <div className="CheckBox__container">

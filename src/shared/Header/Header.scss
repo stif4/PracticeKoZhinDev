@@ -3,8 +3,8 @@
     background-color: var(--base-white-color);
     position: fixed;
     z-index: 10000;
-    overflow:auto;
-    
+    overflow: auto;
+
     &__container {
         width: 100%;
         height: 50px;
@@ -15,8 +15,8 @@
 
     &__logo {
         flex: 0 0 20%;
-		display: flex;
-		align-items: center;
+        display: flex;
+        align-items: center;
     }
 
     &__tabs {
@@ -35,6 +35,7 @@
         width: 24px;
         height: 24px;
         cursor: pointer;
+        margin-left: 16px;
     }
 
     &__imgAvata {
@@ -49,7 +50,6 @@
     }
 
     &__login {
-        margin-right: 16px;
         width: 64px;
         height: 34px;
     }

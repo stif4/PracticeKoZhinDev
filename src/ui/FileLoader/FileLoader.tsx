@@ -7,37 +7,72 @@ const BUTTON_CLASS_NAME = 'Button__main_empty Button__main_empty_colorGray Butto
 const ERROR_MESSAGE = 'Please select a file!';
 const INDEX_UPLOADED_FILE = 0;
 
-export default function FileLoder() {
-    const filePicker = React.useRef<any>(null);
-    const [selectedFile, setSelectedFile] = React.useState(null);
+interface IFileLoder {
+    onUploadFile: (file: FormData | null) => void;
+}
 
-    const handleChange = (event: any) => {
-        event.preventDefault();
-        setSelectedFile(event.target.files[INDEX_UPLOADED_FILE]);
+export default function FileLoder({onUploadFile}: IFileLoder) {
+    const filePicker = React.useRef<HTMLInputElement>(null);
+    const [fileURL, setFileURL] = React.useState<string | ArrayBuffer | null>(null);
+    const [selectFile, setSelectFile] = React.useState<File | null>(null);
+
+    const clearUploadInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.target.value = '';
     };
 
-    const handeleUpload = async () => {
-        if (!selectedFile) {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        if (event.target.files !== null) {
+            const fileReader = new FileReader();
+            fileReader.onloadend = () => {
+                setFileURL(fileReader.result);
+            };
+            const file: File = event.target.files[INDEX_UPLOADED_FILE];
+            setSelectFile(file);
+            fileReader.readAsDataURL(file);
+            clearUploadInput(event);
+        }
+    };
+
+    const handleReset = () => {
+        setFileURL(null);
+        setSelectFile(null);
+        onUploadFile(null);
+    };
+
+    const handleUpload = async () => {
+        if (!selectFile) {
             alert(ERROR_MESSAGE);
             return;
         }
-        const formData = new FormData();
-        formData.append('image', selectedFile);
+        if (selectFile) {
+            const formData = new FormData();
+            formData.append('file', selectFile, selectFile.name);
+            onUploadFile(formData);
+        }
     };
 
     React.useEffect(() => {
-        if (selectedFile !== null) {
-            handeleUpload();
+        if (selectFile !== null) {
+            handleUpload();
         }
-    }, [selectedFile]);
+    }, [selectFile]);
 
-    const handlePick = (event: any) => {
+    const handlePick = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        filePicker.current.click();
+        if (filePicker.current !== null) {
+            filePicker.current.click();
+        }
     };
 
-    const visualComponent = () => selectedFile ? (
-        <FileShow label="Фото профиля" />
+    const visualComponent = () => selectFile ? (
+        <FileShow
+            uploadedFile={selectFile}
+            fileURL={fileURL}
+            onReset={handleReset}
+            onChange={handlePick}
+            label="Фото профиля"
+        />
     ) : (
         <Button
             upLabel="Фото профиля"

@@ -4,10 +4,14 @@ import './Input.scss';
 
 interface IInput {
     label: string;
-    onChange: () => void;
+    onChange: (
+        e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => void;
+    onReset: (name: string) => void;
     className?: string;
     error?: boolean;
     name: string;
+    id: string;
     type?: string;
     value: string;
     placeholder?: string;
@@ -22,13 +26,16 @@ const URL_ICON_SHOW = '/icons/view.svg';
 const URL_ICON_HIDE = '/icons/viewhide.svg';
 const URL_ICON_CROOS = '/icons/cross.svg';
 const INITAL_VALUE = false;
+const INDEX_NAME_ELEMENT = 0;
 
 export default function Input({
     error,
     label,
     onChange,
+    onReset,
     className = '',
     name,
+    id,
     type,
     value,
     placeholder,
@@ -51,10 +58,13 @@ export default function Input({
         return URL_ICON_CROOS;
     };
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const targetId = e.currentTarget.id;
+        const targetName = targetId.split('-')[INDEX_NAME_ELEMENT];
         if (type === 'password') {
-            setShowPassword((prev) => !prev);
+            return setShowPassword((prev) => !prev);
         }
+        return onReset(targetName);
     };
 
     const getCurrentType = () => {
@@ -75,6 +85,7 @@ export default function Input({
                         className={calssInput}
                         type={getCurrentType()}
                         name={name}
+                        id={name}
                         placeholder={placeholder}
                         value={value}
                         onChange={onChange}
@@ -83,6 +94,7 @@ export default function Input({
                         className="Input__button"
                         onKeyPress={onKeyPressHandler}
                         role="button"
+                        id={id + 'div'}
                         onClick={handleClick}
                         tabIndex={0}
                     >

@@ -1,22 +1,102 @@
-import React, {useState} from 'react';
+import React from 'react';
+import * as yup from 'yup';
 import Button from '../../../ui/Button/Button';
+import Error from '../../../ui/Error';
 import FileLoder from '../../../ui/FileLoader/FileLoader';
 import Input from '../../../ui/Input';
 import TextArea from '../../../ui/TextArea';
+import {validateEmail, validatelastName, validatePassword, validateStringIsEmpty} from '../../../utils/schimsValidate';
+import {useValidate} from '../../Hooks/useValidate';
 import './RegisterForm.scss';
+import {useRegisterUserMutation} from '../../../store/api/authApi';
+import {IErrorResponse} from '../../../store/api/types';
 
-const INITIAL_VALUE = 'checked';
+interface IDataRegister {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    description: string;
+}
+
+interface IError {
+    [key: string]: string | undefined;
+}
+
+const REGISTER_DATA_INITAIL = {
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    description: '',
+};
+
+const SCHEMA_REGISTER = yup.object().shape({
+    password: validatePassword,
+    email: validateEmail,
+    firstName: validateStringIsEmpty,
+    lastName: validatelastName,
+});
+
+export type TRegisterSchema = yup.InferType<typeof SCHEMA_REGISTER>;
+interface IAvatar {
+    avatar: FormData | null;
+}
+export type TRegisterInput = TRegisterSchema & IAvatar;
 
 export default function RegisterForm() {
-    const [check, setCheck] = useState<'checked' | 'notChecked'>(INITIAL_VALUE);
-    const handleChange = () => {};
-    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {};
-    const onKeyPressHandler = () => {};
-    const handleSubbmit = (e: React.MouseEvent<HTMLElement>) => {
+    const [dataRegister, setDataRegister] = React.useState<IDataRegister>(REGISTER_DATA_INITAIL);
+    const [isValid, errorsValidate, checkValid, isCheckValid] = useValidate<IDataRegister>(dataRegister, SCHEMA_REGISTER);
+    const [uploadedFile, setUploadedFile] = React.useState<FormData | null>(null);
+    const [registerUser, {isLoading, isError, error: errorServer, isSuccess}] = useRegisterUserMutation();
+
+    const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.currentTarget.value;
+        const name = e.currentTarget.name;
+        setDataRegister((prev) => ({...prev, [name]: value}));
+    };
+
+    const handleResetDataRegisterValue = (name: string) => {
+        setDataRegister((prev) => ({...prev, [name]: ''}));
+    };
+
+    const handleSubbmit = async (e: React.MouseEvent<HTMLElement>) => {
         if (e) {
             e.preventDefault();
+            const isValidated = await checkValid();
+            if (isValidated) {
+                try {
+                    await registerUser({...dataRegister, avatar: uploadedFile});
+                } catch (err) {
+                    console.log(err);
+                }
+            }
         }
     };
+
+    const handleUploadFile = (file: FormData | null) => {
+        setUploadedFile(file);
+    };
+
+    const getErrorMessage = () => {
+        if (errorsValidate) {
+            const keysListError = Object.keys(errorsValidate);
+            const lastKey = keysListError[keysListError.length - 1];
+            const lastError = (errorsValidate as IError)[lastKey];
+            return lastError !== undefined ? lastError : '';
+        }
+        if (errorServer) {
+            const errServe = errorServer as IErrorResponse;
+            return errServe.message;
+        }
+        return '';
+    };
+
+    React.useEffect(() => {
+        if (isCheckValid) {
+            checkValid();
+        }
+    }, [dataRegister]);
 
     return (
         <form className="RegisterForm">
@@ -25,8 +105,11 @@ export default function RegisterForm() {
                     <Input
                         label="Имя"
                         onChange={handleChange}
-                        name="userName"
-                        value="value"
+                        onReset={handleResetDataRegisterValue}
+                        name="firstName"
+                        error={Boolean(errorsValidate?.firstName)}
+                        id="firstName-Registerform-id"
+                        value={dataRegister.firstName}
                         placeholder="Введите имя"
                     />
                 </div>
@@ -34,8 +117,11 @@ export default function RegisterForm() {
                     <Input
                         label="Фамилия"
                         onChange={handleChange}
-                        name="userSurname"
-                        value="value"
+                        onReset={handleResetDataRegisterValue}
+                        name="lastName"
+                        error={Boolean(errorsValidate?.lastName)}
+                        id="lastName-Registerform-id"
+                        value={dataRegister.lastName}
                         placeholder="Введите фамилию"
                     />
                 </div>
@@ -43,8 +129,11 @@ export default function RegisterForm() {
                     <Input
                         label="Email"
                         onChange={handleChange}
-                        name="Email"
-                        value="value"
+                        onReset={handleResetDataRegisterValue}
+                        name="email"
+                        error={Boolean(errorsValidate?.email)}
+                        id="email-Registerform-id"
+                        value={dataRegister.email}
                         placeholder="Введите Email"
                     />
                 </div>
@@ -52,24 +141,28 @@ export default function RegisterForm() {
                     <Input
                         label="Пароль"
                         onChange={handleChange}
+                        onReset={handleResetDataRegisterValue}
                         name="password"
+                        error={Boolean(errorsValidate?.password)}
+                        id="password-Registerform-id"
                         type="password"
-                        value="Sdqwe"
+                        value={dataRegister.password}
                         withProgress
                         placeholder="Введите пароль"
                     />
                 </div>
                 <div className="RegisterForm__fileLoader">
-                    <FileLoder />
+                    <FileLoder onUploadFile={handleUploadFile} />
                 </div>
                 <div className="RegisterForm__textArea">
                     <TextArea
                         onChange={handleChange}
-                        value=""
-                        name="textArea"
+                        value={dataRegister.description}
+                        name="description"
+                        id="description-Registerform-id"
                         placeholder="Расскажи о себе"
                         label="Описание профиля"
-                        onClick={handleClick}
+                        onReset={handleResetDataRegisterValue}
                     />
                 </div>
                 <div className="RegisterForm__button">
@@ -78,6 +171,14 @@ export default function RegisterForm() {
                         onClick={handleSubbmit}
                     />
                 </div>
+                {(!isValid || isError) && (
+                    <div className="LoginForm__Error">
+                        <Error
+                            place="register"
+                            message={getErrorMessage()}
+                        />
+                    </div>
+                )}
             </div>
         </form>
     );

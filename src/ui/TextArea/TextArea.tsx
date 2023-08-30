@@ -1,24 +1,36 @@
 import React from 'react';
 import './TextArea.scss';
 
+const INDEX_NAME_ELEMENT = 0;
 interface ITextArea {
-    onChange: () => void;
+    onChange: (
+        e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => void;
     value: string;
     name: string;
+    id: string;
     placeholder: string;
     label: string;
-    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    onReset: (name: string) => void;
 }
 
 export default function TextArea({
     onChange,
     value,
     name,
+    id,
     placeholder,
     label,
-    onClick,
+    onReset,
 }: ITextArea) {
     const onKeyPressHandler = () => {};
+
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const targetId = e.currentTarget.id;
+        const targetName = targetId.split('-')[INDEX_NAME_ELEMENT];
+        return onReset(targetName);
+    };
+
     return (
         <div className="TextArea">
             <div className="TextArea__container">
@@ -35,8 +47,9 @@ export default function TextArea({
                     <div
                         className="TextArea__img"
                         onKeyPress={onKeyPressHandler}
-                        onClick={onClick}
+                        onClick={handleClick}
                         role="button"
+                        id={id}
                         tabIndex={0}
                     >
                         <img

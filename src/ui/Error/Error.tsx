@@ -4,41 +4,36 @@ import './Error.scss';
 
 interface IError {
     message: string;
-    place?: 'login';
+    place?: 'login' | 'register';
 }
 
-type ErrorKeys =
-    | 'User not found'
-    | 'Email must be an email'
-    | 'Password should not be empty'
-    | 'Password must be longer than or equal to 4 characters'
-    | 'This user already exists'
-    | 'File not found';
-
-type TypeTitleOrMessage = 'title' | 'message';
+interface IErrorObject {
+    [key: string]: string;
+}
 
 const MESSAGE_AUTH_DEFFULT = 'Не правильный email или пароль';
-const INDEX_TITLE = 0;
-const INDEX_MESSAGE = 1;
+const TITLE_AUTH = 'Авторизации';
+const TITLE_REGISTER = 'Регистрации';
 
 export default function Error({message, place}: IError) {
-    const errorKeyTranslated = Object.keys(ERROR_OBJECT).find((errkey) => {
-        if (message === errkey) {
-            return errkey;
-        }
-        return message;
-    });
-
-    const getTitleOrMessage = (type: TypeTitleOrMessage) => {
-        if (errorKeyTranslated) {
-            const index = type === 'title' ? INDEX_TITLE : INDEX_MESSAGE;
-            const slices = ERROR_OBJECT[errorKeyTranslated as ErrorKeys].split('/');
-            if (place === 'login' && type !== 'title') {
+    const getMessage = () => {
+        const errorTranslated = message in ERROR_OBJECT ? (ERROR_OBJECT as IErrorObject)[message] : message;
+        if (errorTranslated) {
+            if (place === 'login') {
                 return MESSAGE_AUTH_DEFFULT;
             }
-            return slices[index];
         }
-        return errorKeyTranslated;
+        return errorTranslated;
+    };
+
+    const getTitle = () => {
+        if (place === 'login') {
+            return TITLE_AUTH;
+        }
+        if (place === 'register') {
+            return TITLE_REGISTER;
+        }
+        return '';
     };
 
     return (
@@ -53,12 +48,8 @@ export default function Error({message, place}: IError) {
                 </div>
 
                 <div className="Error__text">
-                    <div className="Error__title">
-                        {`Ошибка ${getTitleOrMessage('title')}:`}
-                    </div>
-                    <div className="Error__message">
-                        {getTitleOrMessage('message')}
-                    </div>
+                    <div className="Error__title">{`Ошибка ${getTitle()}:`}</div>
+                    <div className="Error__message">{getMessage()}</div>
                 </div>
             </div>
         </div>

@@ -5,13 +5,14 @@ import '../MenuBurger.scss';
 
 interface IMenuList {
     menuItems: IMenuArrayItem[];
+    closeMenu: () => void;
 }
 
 const ITEM_DFULLT = 'MenuBurger__item';
 const ITEM_ACTIVE = 'MenuBurger__item MenuBurger__item_active';
 
-export default function MenuList({menuItems}: IMenuList) {
-    const getClassNameNavLink = (isActive: boolean) => isActive ? ITEM_ACTIVE : ITEM_DFULLT;
+export default function MenuList({menuItems, closeMenu}: IMenuList) {
+    const getClassNameNavLink = (isActive: boolean) => (isActive ? ITEM_ACTIVE : ITEM_DFULLT);
     return (
         <>
             {menuItems.map((item) => (
@@ -20,6 +21,7 @@ export default function MenuList({menuItems}: IMenuList) {
                     to={item.path}
                     end
                     className={({isActive}) => getClassNameNavLink(isActive)}
+                    onClick={closeMenu}
                 >
                     <img
                         className="MenuBurger__icon"

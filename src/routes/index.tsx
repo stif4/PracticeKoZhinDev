@@ -1,17 +1,11 @@
 import React from 'react';
 import {createBrowserRouter} from 'react-router-dom';
-import {
-    ROUTE_AUTH,
-    ROUTE_HOME,
-    ROUTE_NEWS,
-    ROUTE_REGISTER,
-    ROUTE_SUBSCRIPTIONS,
-    ROUTE_USER,
-} from '../constants/routes';
+import {ROUTE_AUTH, ROUTE_HOME, ROUTE_NEWS, ROUTE_REGISTER, ROUTE_SUBSCRIPTIONS, ROUTE_USER} from '../constants/routes';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import Layout from '../shared/Layout';
+import PrivateRoute from './PrivateRoute';
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
     {
         path: ROUTE_HOME,
         element: <Layout />,
@@ -44,6 +38,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: ROUTE_USER,
+                element: <PrivateRoute />,
                 children: [
                     {
                         index: true,
@@ -62,3 +57,4 @@ export const router = createBrowserRouter([
         ],
     },
 ]);
+export default router;

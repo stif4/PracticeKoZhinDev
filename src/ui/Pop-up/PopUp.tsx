@@ -37,12 +37,16 @@ export default function PopUp({items}: IPopUp) {
                             {items.map((item) => {
                                 const classItem = item.addClass === 'red' ? ITEM_CLASS_RED : '';
                                 return (
-                                    <li
+                                    <div
                                         key={item.text}
                                         className={`PopUp__item ${classItem}`}
+                                        onClick={item.action}
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyPress={onKeyPressHandler}
                                     >
                                         {item.text}
-                                    </li>
+                                    </div>
                                 );
                             })}
                         </ul>

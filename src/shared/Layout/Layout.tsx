@@ -25,11 +25,13 @@ export default function Layout() {
     };
 
     return (
-        <div className={getClassLayout()}>
-            <Header />
-            <div className="Layout__container">
-                <Outlet />
+        <>
+            <div className={getClassLayout()}>
+                <Header />
+                <div className="Layout__container">
+                    <Outlet />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
