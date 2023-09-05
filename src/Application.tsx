@@ -1,6 +1,6 @@
 import React from 'react';
 import {RouterProvider} from 'react-router-dom';
-import AppLoader from './shared/Hoc/AppLoader';
+import AppLoader from './hoc/AppLoader';
 import router from './routes';
 import './style/index.scss';
 

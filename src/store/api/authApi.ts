@@ -1,6 +1,6 @@
-import {createApi, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react';
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import jwt from 'jwt-decode';
-import {TLoginInput} from '../../shared/Forms/LoginForm/LoginForm';
+import {TLoginInput, ECheck} from '../../shared/Forms/LoginForm/LoginForm';
 import {TRegisterInput} from '../../shared/Forms/RegisterForm/RegisterForm';
 import {IErrorResponse, IGenericResponse, IJWTDecode, IResponceLogin} from './types';
 import {userApi} from './userApi';
@@ -15,7 +15,7 @@ export const authApi = createApi({
         baseUrl: `${URL_BASE}`,
     }),
     endpoints: (builder) => ({
-        registerUser: builder.mutation<IGenericResponse, TRegisterInput>({
+        register: builder.mutation<IGenericResponse, TRegisterInput>({
             query(data) {
                 return {
                     url: `${URL_REGISTER}`,
@@ -30,7 +30,7 @@ export const authApi = createApi({
             async onQueryStarted(args, {dispatch, queryFulfilled}) {
                 try {
                     await queryFulfilled;
-                    await dispatch(authApi.endpoints.loginUser.initiate({password: args.password, email: args.email}));
+                    await dispatch(authApi.endpoints.login.initiate({password: args.password, email: args.email, remember: ECheck.unchecked}));
                     if (args.avatar !== null) {
                         await dispatch(userApi.endpoints.setAvatar.initiate(args.avatar));
                     }
@@ -39,7 +39,7 @@ export const authApi = createApi({
                 }
             },
         }),
-        loginUser: builder.mutation<IResponceLogin, TLoginInput>({
+        login: builder.mutation<IResponceLogin, TLoginInput>({
             query(data) {
                 return {
                     url: `${URL_LOGIN}`,
@@ -55,10 +55,19 @@ export const authApi = createApi({
             async onQueryStarted(args, {dispatch, queryFulfilled}) {
                 try {
                     const tokens = (await queryFulfilled).data;
-                    const user: IJWTDecode = jwt(tokens.accessToken);
-                    coockiesService().setTookens({tokens, user});
-                    if (user) {
-                        await dispatch(userApi.endpoints.getUser.initiate(user.id));
+                    const accessDecod: IJWTDecode = jwt(tokens.accessToken);
+                    const refreshDecod: IJWTDecode = jwt(tokens.accessToken);
+                    const authData = {
+                        userId: accessDecod.id,
+                        accessExp: accessDecod.iat,
+                        refreshExp: refreshDecod.exp,
+                        refresh: tokens.refreshToken,
+                        access: tokens.accessToken,
+                        remember: args.remember,
+                    };
+                    coockiesService().setTookens(authData);
+                    if (accessDecod) {
+                        await dispatch(userApi.endpoints.getUser.initiate(accessDecod.id));
                     }
                 } catch (error) {
                     console.log(error);
@@ -79,12 +88,15 @@ export const authApi = createApi({
                 if (args) {
                     try {
                         const newTokenAccess = (await queryFulfilled).data.accessToken;
-                        const user: IJWTDecode = jwt(newTokenAccess);
-                        const oldTokenRefresh = coockiesService().getRefreshtoken();
-                        const tokens = {accessToken: newTokenAccess, refreshToken: oldTokenRefresh};
-                        coockiesService().setTookens({tokens, user});
-                        if (user) {
-                            await dispatch(userApi.endpoints.getUser.initiate(user.id));
+                        const accessDecod: IJWTDecode = jwt(newTokenAccess);
+                        const authData = {
+                            userId: accessDecod.id,
+                            accessExp: accessDecod.iat,
+                            access: newTokenAccess,
+                        };
+                        coockiesService().setTookens(authData);
+                        if (accessDecod) {
+                            await dispatch(userApi.endpoints.getUser.initiate(accessDecod.id));
                         }
                     } catch (error) {
                         console.log(error);
@@ -94,4 +106,4 @@ export const authApi = createApi({
         }),
     }),
 });
-export const {useLoginUserMutation, useRegisterUserMutation, useRefreshMutation} = authApi;
+export const {useLoginMutation, useRegisterMutation, useRefreshMutation} = authApi;

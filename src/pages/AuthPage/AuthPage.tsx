@@ -1,5 +1,6 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
+import {ROUTE_HOME} from '../../constants/routes';
 import LoginForm from '../../shared/Forms/LoginForm';
 import RegisterForm from '../../shared/Forms/RegisterForm';
 import {getMe} from '../../store/features/userSlice';
@@ -13,28 +14,35 @@ export interface ILabelTab {
     path: string;
 }
 
+export enum EAuth {
+    login = 'login',
+    register = 'register',
+}
+
+export type TAuth = 'login' | 'register';
+
 const LABELS: ILabelTab[] = [
     {id: 'login', label: 'Авторизация', path: '/auth'},
     {id: 'register', label: 'Регистрация', path: '/auth/register'},
 ];
 
 export default function AuthPage() {
-    const [activeTab, setIsActiveTab] = React.useState<string>('login');
+    const [activeTab, setIsActiveTab] = React.useState<TAuth>(EAuth.login);
     const user = useAppSelector(getMe());
 
     const navigate = useNavigate();
     React.useEffect(() => {
         if (user) {
-            navigate('/');
+            navigate(ROUTE_HOME);
         }
     }, [user]);
 
     const hendleChange = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const tab = e.currentTarget.id;
+        const tab = e.currentTarget.id as TAuth;
         setIsActiveTab(tab);
     };
 
-    const getForm = () => (activeTab === 'login' ? <LoginForm /> : <RegisterForm />);
+    const getForm = () => (activeTab === EAuth.login ? <LoginForm /> : <RegisterForm />);
 
     return (
         <div className="AuthPage">

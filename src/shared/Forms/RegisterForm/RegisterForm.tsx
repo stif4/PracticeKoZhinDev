@@ -6,9 +6,9 @@ import FileLoder from '../../../ui/FileLoader/FileLoader';
 import Input from '../../../ui/Input';
 import TextArea from '../../../ui/TextArea';
 import {validateEmail, validatelastName, validatePassword, validateStringIsEmpty} from '../../../utils/schimsValidate';
-import {useValidate} from '../../Hooks/useValidate';
+import {useValidate} from '../../../hooks/useValidate';
 import './RegisterForm.scss';
-import {useRegisterUserMutation} from '../../../store/api/authApi';
+import {useRegisterMutation} from '../../../store/api/authApi';
 import {IErrorResponse} from '../../../store/api/types';
 
 interface IDataRegister {
@@ -38,17 +38,18 @@ const SCHEMA_REGISTER = yup.object().shape({
     lastName: validatelastName,
 });
 
-export type TRegisterSchema = yup.InferType<typeof SCHEMA_REGISTER>;
+//export type TRegisterSchema = yup.InferType<typeof SCHEMA_REGISTER>;
 interface IAvatar {
     avatar: FormData | null;
 }
-export type TRegisterInput = TRegisterSchema & IAvatar;
+
+export type TRegisterInput = IDataRegister & IAvatar;
 
 export default function RegisterForm() {
     const [dataRegister, setDataRegister] = React.useState<IDataRegister>(REGISTER_DATA_INITAIL);
     const [isValid, errorsValidate, checkValid, isCheckValid] = useValidate<IDataRegister>(dataRegister, SCHEMA_REGISTER);
     const [uploadedFile, setUploadedFile] = React.useState<FormData | null>(null);
-    const [registerUser, {isLoading, isError, error: errorServer, isSuccess}] = useRegisterUserMutation();
+    const [register, {isLoading, isError, error: errorServer, isSuccess}] = useRegisterMutation();
 
     const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.currentTarget.value;
@@ -66,7 +67,7 @@ export default function RegisterForm() {
             const isValidated = await checkValid();
             if (isValidated) {
                 try {
-                    await registerUser({...dataRegister, avatar: uploadedFile});
+                    await register({...dataRegister, avatar: uploadedFile});
                 } catch (err) {
                     console.log(err);
                 }

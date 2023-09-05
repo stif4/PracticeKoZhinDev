@@ -1,6 +1,6 @@
 import React from 'react';
-import coockiesService from '../../service/coockies.service';
-import {useRefreshMutation} from '../../store/api/authApi';
+import coockiesService from '../service/coockies.service';
+import {useRefreshMutation} from '../store/api/authApi';
 
 interface IAppLoader {
     children: React.ReactNode;

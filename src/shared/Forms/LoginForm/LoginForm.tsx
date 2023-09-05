@@ -5,15 +5,14 @@ import CheckBox from '../../../ui/CheckBox/CheckBox';
 import Error from '../../../ui/Error';
 import Input from '../../../ui/Input';
 import {validateEmail, validatePassword} from '../../../utils/schimsValidate';
-import {useValidate} from '../../Hooks/useValidate';
+import {useValidate} from '../../../hooks/useValidate';
 import './LoginForm.scss';
-import {useLoginUserMutation} from '../../../store/api/authApi';
+import {useLoginMutation} from '../../../store/api/authApi';
 import {IErrorResponse} from '../../../store/api/types';
 
 const PATH_ICON_FILL = '/icons/checkbox.svg';
 const PATH_ICON_EMPTY = '/icons/checkboxEmpty.svg';
 const PATH_ICONS = [PATH_ICON_EMPTY, PATH_ICON_FILL];
-const INITIAL_VALUE = 'checked';
 
 interface IDataLogin {
     email: string;
@@ -33,17 +32,23 @@ const SCHEMA_LOGIN = yup.object().shape({
     password: validatePassword,
 });
 
-export type TLoginInput = yup.InferType<typeof SCHEMA_LOGIN>;
+export type TCheck = 'checked' | 'unchecked';
+export enum ECheck {
+    checked = 'checked',
+    unchecked = 'unchecked',
+}
+
+export type TLoginInput = {remember: TCheck} & IDataLogin;
 
 export default function LoginForm() {
     const [dataLogin, setDataLogin] = React.useState<IDataLogin>(LOGIN_DATA_INITIAL);
     const [isValid, errorsValidate, checkValid, isCheckValid] = useValidate<IDataLogin>(dataLogin, SCHEMA_LOGIN);
-    const [check, setCheck] = React.useState<'checked' | 'unchecked'>(INITIAL_VALUE);
-    const [loginUser, {isLoading, isError, error: errorServer, isSuccess}] = useLoginUserMutation();
+    const [remember, setRemember] = React.useState<TCheck>(ECheck.checked);
+    const [login, {isLoading, isError, error: errorServer, isSuccess}] = useLoginMutation();
 
     const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const id = e.currentTarget.id as 'checked' | 'notChecked';
-        setCheck(id === 'checked' ? 'unchecked' : 'checked');
+        const id = e.currentTarget.id as TCheck;
+        setRemember(id === ECheck.checked ? ECheck.unchecked : ECheck.checked);
     };
 
     const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -62,7 +67,7 @@ export default function LoginForm() {
             const isValidated = await checkValid();
             if (isValidated) {
                 try {
-                    await loginUser(dataLogin);
+                    await login({...dataLogin, remember});
                 } catch (err) {
                     console.log(err);
                 }
@@ -124,7 +129,7 @@ export default function LoginForm() {
                     <CheckBox
                         onClick={onClick}
                         label="Запомни меня"
-                        value={check}
+                        value={remember}
                         pathsIcons={PATH_ICONS}
                     />
                 </div>

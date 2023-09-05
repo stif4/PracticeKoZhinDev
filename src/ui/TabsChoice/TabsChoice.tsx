@@ -1,13 +1,13 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
-import {ILabelTab} from '../../pages/AuthPage/AuthPage';
+import {ILabelTab, TAuth} from '../../pages/AuthPage/AuthPage';
 import Tab from './Tab';
 import './TabsChoice.scss';
 
 interface ITabsChoice {
     onChange: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     labels: ILabelTab[];
-    activeTab: string;
+    activeTab: TAuth;
 }
 
 export default function TabsChoice({onChange, labels, activeTab}: ITabsChoice) {
