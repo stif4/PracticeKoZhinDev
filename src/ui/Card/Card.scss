@@ -1,0 +1,9 @@
+.Card {
+    width: 100%;
+    background-color: var(--base-white-color);
+    border-radius: var(--base-border-radius);
+    box-shadow: inset 0px 0px 0px 1px var(--gray-light-color);
+    &__container {
+        padding: 16px;
+    }
+}

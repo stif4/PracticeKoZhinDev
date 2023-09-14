@@ -1,22 +1,17 @@
 import React, {useState} from 'react';
 import PopUp from '../../Pop-up';
+import {IItem} from '../../types/types';
 import './FileShow.scss';
-
-export interface IItem {
-    text: string;
-    addClass: 'red' | '';
-    action?: (event?: any) => void;
-}
 
 interface IFileShow {
     label: string;
-    uploadedFile: File;
+    fileName: string;
     fileURL: string | ArrayBuffer | null;
     onReset: () => void;
     onChange: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-export default function FileShow({uploadedFile, label, fileURL, onReset, onChange}: IFileShow) {
+export default function FileShow({fileName, label, fileURL, onReset, onChange}: IFileShow) {
     const ITEMS: IItem[] = [
         {text: 'Заменить фото', addClass: '', action: onChange},
         {text: 'Удалить фото', addClass: 'red', action: onReset},
@@ -32,7 +27,7 @@ export default function FileShow({uploadedFile, label, fileURL, onReset, onChang
                         src={fileURL as string}
                         alt="loaded"
                     />
-                    <p className="FileShow__text">{uploadedFile.name}</p>
+                    <p className="FileShow__text">{fileName}</p>
                 </div>
                 <div className="FileShow__menu">
                     <PopUp items={ITEMS} />

@@ -1,8 +1,8 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
-import fetchService from '../../service/fetch.service';
-import {getMe} from '../../store/features/userSlice';
+import {getMe, getUrlAvatar} from '../../store/features/userSlice';
 import {useAppSelector} from '../../store/store';
+import Avatar from '../../ui/Avatar';
 import Button from '../../ui/Button/Button';
 import MenuBurger from '../MenuBurger/MenuBurger';
 import './Header.scss';
@@ -38,40 +38,35 @@ const MENU_ITEMS: IMenuArrayItem[] = [
 const PATH_MENU_ACTIVE = '/icons/сrossMenu.svg';
 const PATH_MENU_NOT_ACTIVE = '/icons/menu.svg';
 const BUTTON_CLASS_NAME = 'Button__main Button__main_empty Button__main_empty_colorGray Button__main_empty_colorGray_small';
-const URL_IMAGE_BASE = 'https://i.pinimg.com/originals/d5/e9/39/d5e939dfd5ec2c95ce8cd1844d11c1ad.jpg';
 
 export default function Header() {
     const [isActiveMenu, setIsActiveMenu] = React.useState<boolean>(false);
-    const [avatar, setAvatar] = React.useState<string>(URL_IMAGE_BASE);
     const me = useAppSelector(getMe());
+    const {urlAvatar, loading} = useAppSelector(getUrlAvatar());
     const onKeyPressHandler = () => {};
     const getPathMenu = () => (isActiveMenu ? PATH_MENU_ACTIVE : PATH_MENU_NOT_ACTIVE);
-
-    const parseAvatar = async () => {
-        if (me) {
-            const url = await fetchService().fetchFile(me.avatarId);
-            setAvatar(url);
-        }
-    };
-
-    React.useEffect(() => {
-        if (me && me.avatarId) {
-            parseAvatar();
-        }
-    }, [me]);
 
     const toggleMenuHandler = () => {
         setIsActiveMenu((prev) => !prev);
     };
 
+    const getInformationBlock = () => {
+        if (me) {
+            return {nickname: me.nickname, lastName: me.lastName, firstName: me.firstName};
+        }
+        return undefined;
+    };
+
     const getAvatar = () => {
         if (me) {
             return (
-                <img
-                    className="Header__imgAvata"
-                    src={avatar}
-                    alt="avatar"
-                />
+                <div className="Header__imgAvata">
+                    <Avatar
+                        urlImg={urlAvatar}
+                        informationBlock={getInformationBlock()}
+                        isLoading={loading}
+                    />
+                </div>
             );
         }
         return (

@@ -1,3 +1,7 @@
+import {Omit} from '@reduxjs/toolkit/dist/tsHelpers';
+import {TRegisterInput} from '../../shared/Forms/RegisterForm/RegisterForm';
+
+//----// User //----//
 export interface ISubscriptions {
     id: number;
     firstName: string;
@@ -17,14 +21,15 @@ export interface IUser {
     nickname: string;
     phone: string;
     email: string;
-    updateTime: string;
-    createTime: string;
+    updateTime: Date;
+    createTime: Date;
     avatarId: number;
     pinnedPostId: number;
     description: string;
     subscriptions: ISubscriptions[];
 }
 
+//----// Auth //----//
 export interface IGenericResponse {
     status: string;
     message: string;
@@ -46,4 +51,50 @@ export interface IJWTDecode {
     id: number;
     iat: number;
     exp: number;
+}
+
+//----// Post //----//
+export interface ITag {
+    title: string;
+}
+export interface ICreator {
+    id: number;
+    firstName: string;
+    lastName: string;
+    nickname: string;
+    phone: string;
+    email: string;
+    updateTime: Date;
+    createTime: Date;
+    avatarId: number;
+    pinnedPostId: number;
+    description: string;
+}
+
+export interface IPost {
+    id: number;
+    title: string;
+    text: string;
+    creatorId: number;
+    likesCount: number;
+    isLiked: boolean;
+    creator: ICreator;
+    tags: ITag[];
+    imageId: number | null;
+    createTime: Date;
+    updateTime: Date;
+}
+
+export interface IPostTransform {
+    id: number;
+    title: string;
+    text: string;
+    creatorId: number;
+    likesCount: number;
+    isLiked: boolean;
+    creator: ICreator;
+    tags: ITag[];
+    imageUrl: string | undefined;
+    createTime: string;
+    updateTime: string;
 }

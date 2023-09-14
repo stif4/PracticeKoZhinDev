@@ -1,0 +1,9 @@
+.PostList {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        & > div:not(:last-child) {
+            margin-bottom: 16px;
+        }
+    }
+}

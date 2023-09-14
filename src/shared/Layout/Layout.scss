@@ -1,14 +1,30 @@
 .Layout {
     background-color: var(--layout-color);
     width: 100%;
+    min-height: 100%;
     font-family: 'Nunito';
 
     &_bgWhite {
         background-color: var(--base-white-color);
     }
-    
+
+    &__wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__main {
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+    }
+
     &__container {
         width: 360px;
+        height: 100%;
         position: relative;
         padding-top: 52px;
         padding-right: 20px;

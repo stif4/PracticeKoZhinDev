@@ -1,7 +1,7 @@
 .PopUp {
     &__container {
         position: relative;
-        z-index: 10000;
+        z-index: var(--pop-up-z-index);
     }
 
     &__img {
@@ -22,6 +22,17 @@
         box-shadow: inset 0px 0px 0px 1px var(--gray-light-color);
         top: 40px;
         right: -8px;
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.25s ease-in-out;
+
+        &_active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.4s ease-in-out;
+            visibility: visible;
+        }
     }
 
     &__menu:before {

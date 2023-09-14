@@ -16,6 +16,7 @@ interface IDataRegister {
     password: string;
     firstName: string;
     lastName: string;
+    nickname: string,
     description: string;
 }
 
@@ -28,12 +29,14 @@ const REGISTER_DATA_INITAIL = {
     password: '',
     firstName: '',
     lastName: '',
+    nickname: '',
     description: '',
 };
 
 const SCHEMA_REGISTER = yup.object().shape({
     password: validatePassword,
     email: validateEmail,
+    nickname: validateStringIsEmpty,
     firstName: validateStringIsEmpty,
     lastName: validatelastName,
 });
@@ -124,6 +127,18 @@ export default function RegisterForm() {
                         id="lastName-Registerform-id"
                         value={dataRegister.lastName}
                         placeholder="Введите фамилию"
+                    />
+                </div>
+                <div className="RegisterForm__input">
+                    <Input
+                        label="Nickname"
+                        onChange={handleChange}
+                        onReset={handleResetDataRegisterValue}
+                        name="nickname"
+                        error={Boolean(errorsValidate?.nickname)}
+                        id="nickname-Registerform-id"
+                        value={dataRegister.nickname}
+                        placeholder="Введите Nickname"
                     />
                 </div>
                 <div className="RegisterForm__input">

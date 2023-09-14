@@ -45,7 +45,7 @@ export default function AuthPage() {
     const getForm = () => (activeTab === EAuth.login ? <LoginForm /> : <RegisterForm />);
 
     return (
-        <div className="AuthPage">
+        <section className="AuthPage">
             <div className="AuthPage__container">
                 <div className="AuthPage__head">
                     <div className="AuthPage__logo">
@@ -65,6 +65,6 @@ export default function AuthPage() {
                 </div>
                 <div className="AuthPage__form">{getForm()}</div>
             </div>
-        </div>
+        </section>
     );
 }

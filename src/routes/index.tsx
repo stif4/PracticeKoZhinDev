@@ -2,6 +2,7 @@ import React from 'react';
 import {createBrowserRouter} from 'react-router-dom';
 import {ROUTE_AUTH, ROUTE_HOME, ROUTE_NEWS, ROUTE_REGISTER, ROUTE_SUBSCRIPTIONS, ROUTE_USER} from '../constants/routes';
 import AuthPage from '../pages/AuthPage/AuthPage';
+import Profile from '../pages/Profile';
 import Layout from '../shared/Layout';
 import PrivateRoute from './PrivateRoute';
 
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <div>profile!</div>,
+                        element: <Profile />,
                     },
                     {
                         path: ':id',

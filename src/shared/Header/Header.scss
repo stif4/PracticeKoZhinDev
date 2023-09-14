@@ -2,13 +2,15 @@
     width: 100%;
     background-color: var(--base-white-color);
     position: fixed;
-    z-index: 10000;
+    z-index: var(--header-z-index);
     overflow: auto;
 
     &__container {
         width: 100%;
         height: 50px;
         padding: 8px 16px 8px 16px;
+        // если исчезнит скрол.
+        padding: 0 calc(20px - (100vw - 100%)) 0 0;
         border-bottom: 1px solid var(--gray-light-color);
         display: flex;
     }

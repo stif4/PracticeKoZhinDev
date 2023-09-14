@@ -1,0 +1,30 @@
+.SlidePaper {
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    z-index: var(--menu-burger-z-index);
+    opacity: 0;
+    transition: all 0.7s ease-in-out;
+
+    &_active {
+        display: block;
+        height: 100%;
+        width: 100%;
+        left: 0%;
+        opacity: 1;
+    }
+
+    &__container {
+        height: calc(100% - 50px);
+        width: 100%;
+        margin-top: 50px;
+    }
+}
+
+.lock {
+    overflow: hidden;
+    padding: 0 calc(16px - (100vw - 100%)) 0 0;
+}

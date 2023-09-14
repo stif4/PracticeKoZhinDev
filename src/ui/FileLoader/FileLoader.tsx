@@ -9,9 +9,10 @@ const INDEX_UPLOADED_FILE = 0;
 
 interface IFileLoder {
     onUploadFile: (file: FormData | null) => void;
+    fileURLDefualt?: string;
 }
 
-export default function FileLoder({onUploadFile}: IFileLoder) {
+export default function FileLoder({onUploadFile, fileURLDefualt}: IFileLoder) {
     const filePicker = React.useRef<HTMLInputElement>(null);
     const [fileURL, setFileURL] = React.useState<string | ArrayBuffer | null>(null);
     const [selectFile, setSelectFile] = React.useState<File | null>(null);
@@ -52,12 +53,6 @@ export default function FileLoder({onUploadFile}: IFileLoder) {
         }
     };
 
-    React.useEffect(() => {
-        if (selectFile !== null) {
-            handleUpload();
-        }
-    }, [selectFile]);
-
     const handlePick = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         if (filePicker.current !== null) {
@@ -65,9 +60,21 @@ export default function FileLoder({onUploadFile}: IFileLoder) {
         }
     };
 
-    const visualComponent = () => selectFile ? (
+    React.useEffect(() => {
+        if (selectFile !== null) {
+            handleUpload();
+        }
+    }, [selectFile]);
+
+    React.useEffect(() => {
+        if (fileURLDefualt) {
+            setFileURL(fileURLDefualt);
+        }
+    }, [fileURLDefualt]);
+
+    const visualComponent = () => fileURL ? (
         <FileShow
-            uploadedFile={selectFile}
+            fileName={selectFile?.name ? selectFile?.name : 'avatar.png'}
             fileURL={fileURL}
             onReset={handleReset}
             onChange={handlePick}

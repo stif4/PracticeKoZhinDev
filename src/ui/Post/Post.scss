@@ -1,0 +1,85 @@
+.Post {
+    width: 100%;
+    &__container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    &__header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    &__menu {
+        display: flex;
+        align-items: center;
+    }
+    &__attacher {
+        margin-right: 16px;
+    }
+    &__imgAttacher {
+        width: 24px;
+        height: 24px;
+    }
+    &__popUp {
+    }
+
+    &__containerImg {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        box-shadow: 0px 3px 8px 0px rgba(47, 2, 110, 0.2);
+        border-radius: var(--base-border-radius);
+    }
+    &__img {
+        // 16 + 16 = невилируют отступ падинга card
+        width: calc(100% + 16px + 16px);
+        height: 100%;
+        border-radius: var(--base-border-radius);
+    }
+
+    &__title {
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-weight: 700;
+        font-size: var(--text-big-size);
+        line-height: 24px;
+        color: var(--text-gray-darck-color);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+        overflow: hidden;
+    }
+
+    &__text {
+        margin-bottom: 16px;
+        font-weight: 400;
+        font-size: var(--post-base-text-size);
+        line-height: 22px;
+        color: var(--text-gray-darck-color);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__tegs {
+        margin-bottom: 16px;
+    }
+
+    &__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__date {
+        line-height: 18px;
+        font-weight: 400;
+        font-size: var(--text-medium-size);
+        color: var(--text-gray-darck-color);
+    }
+}

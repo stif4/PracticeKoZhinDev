@@ -25,6 +25,11 @@
     }
 
     &__label {
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     &__main {
@@ -108,6 +113,13 @@
             padding: 11px 12px 11px 12px;
             &_colorDarck {
                 background-color: var(--main-darck-color);
+            }
+            &_withoutBorder {
+                box-shadow: none;
+                padding: 12px 0px 12px 0px;
+                &:hover {
+                    background-color: initial;
+                }
             }
         }
     }

@@ -8,18 +8,12 @@ interface IButton {
     className?: string;
     disabled?: boolean;
     icon?: string;
+    labelColor?: string;
 }
 
 const BUTTON_CLASS_BASE = 'Button__main ';
 
-export default function Button({
-    label,
-    upLabel,
-    onClick,
-    className,
-    disabled,
-    icon,
-}: IButton) {
+export default function Button({label, upLabel, onClick, className, disabled, icon, labelColor}: IButton) {
     const classButton = BUTTON_CLASS_BASE + className;
 
     return (
@@ -39,7 +33,12 @@ export default function Button({
                                 alt="icon"
                             />
                         )}
-                        <p className="Button__label">{label}</p>
+                        <p
+                            className="Button__label"
+                            style={{color: `${labelColor}`}}
+                        >
+                            {label}
+                        </p>
                     </div>
                 </button>
             </div>

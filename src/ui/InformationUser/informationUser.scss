@@ -1,0 +1,36 @@
+.informationUser {
+    width: 100%;
+    // background-color: var(--base-white-color);
+    // border-radius: var(--base-border-radius);
+    // box-shadow: inset 0px 0px 0px 1px var(--gray-light-color);
+
+    &__container {
+        // padding: 16px;
+        display: flex;
+        flex-direction: column;
+    }
+    &__up {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__avatar {
+        width: 90%;
+    }
+    &__menu {
+    }
+    &__description {
+        margin-top: 16px;
+    }
+    &__textDescroption {
+        font-weight: 400;
+        font-size: var(--text-medium-size);
+        line-height: 18px;
+        color: var(--text-gray-darck-color);
+
+        word-wrap: break-word;
+    }
+    &__bottom {
+        margin-top: 16px;
+    }
+}
