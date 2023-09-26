@@ -2,7 +2,7 @@ import React from 'react';
 import {useToggleLikeMutation} from '../../store/api/postApi';
 import './Like.scss';
 
-interface ILike {
+interface ILikeProps {
     count: number;
     isLiked: boolean;
     postId: number;
@@ -11,7 +11,7 @@ interface ILike {
 const URL_SVG_EMPTY_HEART = './icons/heart.svg';
 const URL_SVG_FILL_HEART = './icons/fillheart.svg';
 
-export default function Like({count, isLiked, postId}: ILike) {
+export default function Like({count, isLiked, postId}: ILikeProps) {
     const [isLike, setIsLike] = React.useState<boolean>(isLiked);
     const [countLikes, setCountLikes] = React.useState<number>(count);
     const [toggleLike, {data, isSuccess}] = useToggleLikeMutation();

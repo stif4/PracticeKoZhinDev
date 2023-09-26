@@ -9,18 +9,11 @@ import {useValidate} from '../../../hooks/useValidate';
 import './LoginForm.scss';
 import {useLoginMutation} from '../../../store/api/authApi';
 import {IErrorResponse} from '../../../store/api/types';
+import {IError} from '../types';
 
 const PATH_ICON_FILL = '/icons/checkbox.svg';
 const PATH_ICON_EMPTY = '/icons/checkboxEmpty.svg';
 const PATH_ICONS = [PATH_ICON_EMPTY, PATH_ICON_FILL];
-
-interface IDataLogin {
-    email: string;
-    password: string;
-}
-interface IError {
-    [key: string]: string | undefined;
-}
 
 const LOGIN_DATA_INITIAL = {
     email: '',
@@ -31,6 +24,10 @@ const SCHEMA_LOGIN = yup.object().shape({
     email: validateEmail,
     password: validatePassword,
 });
+interface IDataLogin {
+    email: string;
+    password: string;
+}
 
 export type TCheck = 'checked' | 'unchecked';
 export enum ECheck {
@@ -141,7 +138,7 @@ export default function LoginForm() {
                     />
                 </div>
                 {(!isValid || isError) && (
-                    <div className="LoginForm__Error">
+                    <div className="LoginForm__error">
                         <Error
                             place="login"
                             message={getErrorMessage()}

@@ -3,12 +3,12 @@ import {IPostTransform} from '../../store/api/types';
 import Post from './Post';
 import './PostList.scss';
 
-interface IPostList {
-    posts: IPostTransform[];
+interface IPostListProps {
+    posts: IPostTransform[] | null;
     withInformationBlock?: boolean;
 }
 
-export default function PostList({posts, withInformationBlock}: IPostList) {
+export default function PostList({posts, withInformationBlock}: IPostListProps) {
     const getInformationBlock = (post: IPostTransform) => {
         if (withInformationBlock) {
             const {firstName, lastName, nickname} = post.creator;
@@ -16,6 +16,10 @@ export default function PostList({posts, withInformationBlock}: IPostList) {
         }
         return undefined;
     };
+
+    if (posts === null) {
+        return <></>;
+    }
 
     return (
         <div className="PostList">

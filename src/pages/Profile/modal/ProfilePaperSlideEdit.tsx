@@ -2,21 +2,21 @@ import React from 'react';
 import UpdateUserForm from '../../../shared/Forms/UpdateUserForm';
 import SlidePaper from '../../../shared/Modal/SlidePaper';
 import Button from '../../../ui/Button';
-import './ProfilePaperSlide.scss';
+import './ProfilePaperSlideEdit.scss';
 
-interface IProfilePaperSlide {
+interface IProfilePaperSlideProps {
     isActive: boolean;
     toggleEditProffile: () => void;
 }
 
 const CLASS_BUTTON = 'Button__main_empty Button__main_empty_colorGray Button__main_medium Button__main_empty_colorGray_medium_withoutBorder';
 
-export default function ProfilePaperSlide({isActive, toggleEditProffile}: IProfilePaperSlide) {
+export default function ProfilePaperSlideEdit({isActive, toggleEditProffile}: IProfilePaperSlideProps) {
     return (
         <SlidePaper isActive={isActive}>
-            <div className="ProfilePaperSlide">
-                <div className="ProfilePaperSlide__container">
-                    <div className="ProfilePaperSlide__Button">
+            <div className="ProfilePaperSlideEdit">
+                <div className="ProfilePaperSlideEdit__container">
+                    <div className="ProfilePaperSlideEdit__button">
                         <Button
                             label="Назад"
                             className={CLASS_BUTTON}

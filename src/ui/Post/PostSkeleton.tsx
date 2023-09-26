@@ -4,12 +4,19 @@ import Avatar from '../Avatar';
 import Card from '../Card';
 import './Post.scss';
 
-export default function PostSkeleton() {
+interface IPostSkeletonProps {
+    marginTop?: string;
+    marginBottom?: string;
+}
+
+export default function PostSkeleton({marginTop = '0px', marginBottom = '0px'}: IPostSkeletonProps) {
     return (
-        <div className="Post">
+        <div
+            className="Post"
+            style={{marginTop, marginBottom}}
+        >
             <Card>
                 <div className="Post__container">
-
                     <div className="Post__header">
                         <Avatar
                             size={50}

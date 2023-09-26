@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../Button';
 
-interface ITab {
+interface ITabProps {
     onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     className: string;
     onKeyPressHandler: () => void;
@@ -20,7 +20,7 @@ export default function Tab({
     label,
     isActive,
     id,
-}: ITab) {
+}: ITabProps) {
     const classTab = isActive ? TAB_ACTIVE : TAB_NOT_ACTIVE;
 
     return (

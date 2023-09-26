@@ -1,7 +1,7 @@
 import React from 'react';
 import './CheckBox.scss';
 
-interface ICheckBox {
+interface ICheckBoxProps {
     onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     value: 'checked' | 'unchecked';
     label?: string;
@@ -10,7 +10,7 @@ interface ICheckBox {
     pathsIcons: string[];
 }
 
-export default function CheckBox({onClick, label, width, height, value, pathsIcons}: ICheckBox) {
+export default function CheckBox({onClick, label, width, height, value, pathsIcons}: ICheckBoxProps) {
     const index = value === 'checked' ? 1 : 0;
     const onKeyPressHandler = () => {};
     return (

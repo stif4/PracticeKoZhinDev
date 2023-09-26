@@ -1,7 +1,7 @@
 import React from 'react';
 import './Button.scss';
 
-interface IButton {
+interface IButtonProps {
     label: string;
     upLabel?: string;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -13,7 +13,7 @@ interface IButton {
 
 const BUTTON_CLASS_BASE = 'Button__main ';
 
-export default function Button({label, upLabel, onClick, className, disabled, icon, labelColor}: IButton) {
+export default function Button({label, upLabel, onClick, className, disabled, icon, labelColor}: IButtonProps) {
     const classButton = BUTTON_CLASS_BASE + className;
 
     return (

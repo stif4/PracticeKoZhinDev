@@ -3,18 +3,18 @@ import {useNavigate} from 'react-router-dom';
 import MenuList from './views/MenuList';
 import {IMenuArrayItem} from '../Header/Header';
 import './MenuBurger.scss';
-import {logOut} from '../../store/features/userSlice';
+import {logOut} from '../../store/features/userSuncks';
 import {useAppDispatch} from '../../store/store';
 import {ROUTE_HOME} from '../../constants/routes';
 import SlidePaper from '../Modal/SlidePaper';
 
-interface IMenuBurger {
+interface IMenuBurgerProps {
     menuItems: IMenuArrayItem[];
     isActive: boolean;
     closeMenu: () => void;
 }
 
-export default function MenuBurger({menuItems, isActive, closeMenu}: IMenuBurger) {
+export default function MenuBurger({menuItems, isActive, closeMenu}: IMenuBurgerProps) {
     const navigate = useNavigate();
     const onKeyPressHandler = () => {};
     const dispatch = useAppDispatch();

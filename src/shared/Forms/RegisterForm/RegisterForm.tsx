@@ -10,19 +10,7 @@ import {useValidate} from '../../../hooks/useValidate';
 import './RegisterForm.scss';
 import {useRegisterMutation} from '../../../store/api/authApi';
 import {IErrorResponse} from '../../../store/api/types';
-
-interface IDataRegister {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    nickname: string,
-    description: string;
-}
-
-interface IError {
-    [key: string]: string | undefined;
-}
+import {IError, IImg} from '../types';
 
 const REGISTER_DATA_INITAIL = {
     email: '',
@@ -41,12 +29,16 @@ const SCHEMA_REGISTER = yup.object().shape({
     lastName: validatelastName,
 });
 
-//export type TRegisterSchema = yup.InferType<typeof SCHEMA_REGISTER>;
-interface IAvatar {
-    avatar: FormData | null;
+interface IDataRegister {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    nickname: string;
+    description: string;
 }
 
-export type TRegisterInput = IDataRegister & IAvatar;
+export type TRegisterInput = IDataRegister & IImg;
 
 export default function RegisterForm() {
     const [dataRegister, setDataRegister] = React.useState<IDataRegister>(REGISTER_DATA_INITAIL);
@@ -70,7 +62,7 @@ export default function RegisterForm() {
             const isValidated = await checkValid();
             if (isValidated) {
                 try {
-                    await register({...dataRegister, avatar: uploadedFile});
+                    await register({...dataRegister, img: uploadedFile});
                 } catch (err) {
                     console.log(err);
                 }
@@ -168,7 +160,10 @@ export default function RegisterForm() {
                     />
                 </div>
                 <div className="RegisterForm__fileLoader">
-                    <FileLoder onUploadFile={handleUploadFile} />
+                    <FileLoder
+                        onUploadFile={handleUploadFile}
+                        label="Фото профиля"
+                    />
                 </div>
                 <div className="RegisterForm__textArea">
                     <TextArea
@@ -188,7 +183,7 @@ export default function RegisterForm() {
                     />
                 </div>
                 {(!isValid || isError) && (
-                    <div className="LoginForm__Error">
+                    <div className="RegisterForm__error">
                         <Error
                             place="register"
                             message={getErrorMessage()}

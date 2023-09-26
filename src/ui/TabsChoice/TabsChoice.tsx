@@ -4,13 +4,13 @@ import {ILabelTab, TAuth} from '../../pages/AuthPage/AuthPage';
 import Tab from './Tab';
 import './TabsChoice.scss';
 
-interface ITabsChoice {
+interface ITabsChoiceProps {
     onChange: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     labels: ILabelTab[];
     activeTab: TAuth;
 }
 
-export default function TabsChoice({onChange, labels, activeTab}: ITabsChoice) {
+export default function TabsChoice({onChange, labels, activeTab}: ITabsChoiceProps) {
     const onKeyPressHandler = () => {};
 
     return (

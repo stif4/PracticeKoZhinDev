@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import {useValidate} from '../../../hooks/useValidate';
 import {IErrorResponse} from '../../../store/api/types';
 import {useUpdateUserMutation} from '../../../store/api/userApi';
-import {getMe, getUrlAvatar, logOut} from '../../../store/features/userSlice';
+import {getMe, getUrlAvatar, logOut} from '../../../store/features/userSuncks';
 import {useAppDispatch, useAppSelector} from '../../../store/store';
 import Button from '../../../ui/Button';
 import Error from '../../../ui/Error';
@@ -12,6 +12,7 @@ import FileLoder from '../../../ui/FileLoader/FileLoader';
 import Input from '../../../ui/Input';
 import TextArea from '../../../ui/TextArea';
 import {validateEmail, validatelastName, validateStringIsEmpty} from '../../../utils/schimsValidate';
+import {IError} from '../types';
 import './UpdateUserForm.scss';
 
 interface IUserUpdate {
@@ -31,10 +32,6 @@ export interface IUserUpdateSent {
     avatar?: FormData;
 }
 
-interface IError {
-    [key: string]: string | undefined;
-}
-
 const UPDATE_DATA_INITAIL = {
     email: '',
     firstName: '',
@@ -50,17 +47,18 @@ const SCHEMA_REGISTER = yup.object().shape({
     lastName: validatelastName,
 });
 
-interface IUpdateUserForm {
+interface IUpdateUserFormProps {
     closeForm: () => void;
 }
 
-export default function UpdateUserForm({closeForm}: IUpdateUserForm) {
+export default function UpdateUserForm({closeForm}: IUpdateUserFormProps) {
     const [dataUpdate, setDataUpdate] = React.useState<IUserUpdate>(UPDATE_DATA_INITAIL);
     const me = useAppSelector(getMe());
     const avatarURL = useAppSelector(getUrlAvatar());
     const [isValid, errorsValidate, checkValid, isCheckValid] = useValidate<IUserUpdate>(dataUpdate, SCHEMA_REGISTER);
     const [uploadedFile, setUploadedFile] = React.useState<FormData | null>(null);
-    const [updateUser, {isLoading, isError, error: errorServer, isSuccess}] = useUpdateUserMutation();
+    const [updateUser, {isLoading, isError: isErrorUpdate, error: errorServer, isSuccess: isSuccessUpdate}] = useUpdateUserMutation();
+    const [isEmailChanged, setIsEmailChanged] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -79,7 +77,6 @@ export default function UpdateUserForm({closeForm}: IUpdateUserForm) {
             if (Object.hasOwn(dataUpdate, property) && me) {
                 const valueUpdate = dataUpdate[property as keyof IUserUpdate];
                 const valueCurrent = me[property as keyof IUserUpdate];
-
                 if (valueUpdate !== valueCurrent) {
                     dataSent[property as keyof IUserUpdate] = valueUpdate;
                 }
@@ -96,22 +93,42 @@ export default function UpdateUserForm({closeForm}: IUpdateUserForm) {
             e.preventDefault();
             const isValidated = await checkValid();
             if (isValidated) {
-                try {
-                    const dataSent = getDataToSent();
-                    await updateUser(dataSent);
-                    if (dataSent.email) {
-                        dispatch(logOut());
-                        toast('Email обновлен. Войдите в систему', {type: 'success'});
-                    } else {
-                        toast('Данные успешно обновленны', {type: 'success'});
-                    }
-                } catch (err) {
-                    console.log(err);
-                    toast('Произошла ошибка', {type: 'error'});
+                const dataSent = getDataToSent();
+                await updateUser(dataSent);
+                if (dataSent.email) {
+                    setIsEmailChanged(true);
                 }
             }
         }
     };
+
+    const logout = async () => {
+        try {
+            if (isEmailChanged) {
+                await dispatch(logOut());
+                toast('Email обновлен. Войдите в систему', {type: 'success'});
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    React.useEffect(() => {
+        if (isSuccessUpdate) {
+            if (isEmailChanged) {
+                logout();
+                toast('Email обновлен. Войдите в систему', {type: 'success'});
+            }
+            toast('Данные успешно обновленны', {type: 'success'});
+            closeForm();
+        }
+    }, [isSuccessUpdate]);
+
+    React.useEffect(() => {
+        if (isErrorUpdate) {
+            toast('Произошла ошибка', {type: 'error'});
+        }
+    }, [isErrorUpdate]);
 
     const handleUploadFile = (file: FormData | null) => {
         setUploadedFile(file);
@@ -149,12 +166,6 @@ export default function UpdateUserForm({closeForm}: IUpdateUserForm) {
             setDataUpdate(initialData);
         }
     }, [me]);
-
-    React.useEffect(() => {
-        if (isSuccess) {
-            closeForm();
-        }
-    }, [isSuccess]);
 
     if (isLoading && !me && !avatarURL) {
         return <div>Loading...</div>;
@@ -215,6 +226,7 @@ export default function UpdateUserForm({closeForm}: IUpdateUserForm) {
                     <FileLoder
                         onUploadFile={handleUploadFile}
                         fileURLDefualt={avatarURL.urlAvatar}
+                        label="Фото профиля"
                     />
                 </div>
                 <div className="UpdateUserForm__textArea">
@@ -234,8 +246,8 @@ export default function UpdateUserForm({closeForm}: IUpdateUserForm) {
                         onClick={handleSubbmit}
                     />
                 </div>
-                {(!isValid || isError) && (
-                    <div className="UpdateUserForm__Error">
+                {(!isValid || isErrorUpdate) && (
+                    <div className="UpdateUserForm__error">
                         <Error
                             place="register"
                             message={getErrorMessage()}

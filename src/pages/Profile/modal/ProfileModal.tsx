@@ -3,13 +3,13 @@ import ModalPaper from '../../../shared/Modal/ModalPaper';
 import Button from '../../../ui/Button';
 import './ProfileModal.scss';
 
-interface IProfileModal {
+interface IProfileModalProps {
     isActive: boolean;
     onActive: (event:React.MouseEvent<HTMLElement>) => void;
     onDelite: () => void;
 }
 
-export default function ProfileModal({isActive, onActive, onDelite}: IProfileModal) {
+export default function ProfileModal({isActive, onActive, onDelite}: IProfileModalProps) {
     return (
         <ModalPaper
             isActive={isActive}

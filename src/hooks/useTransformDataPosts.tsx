@@ -3,7 +3,7 @@ import fetchService from '../service/fetch.service';
 import {IPost, IPostTransform} from '../store/api/types';
 
 export default function useTransformDataPosts(posts: IPost[] | undefined) {
-    const [postsTransformed, setPostsTransformed] = React.useState<IPostTransform[]>();
+    const [postsTransformed, setPostsTransformed] = React.useState<IPostTransform[] | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const transformDate = (date: Date): string => new Date(date).toLocaleDateString();
@@ -35,6 +35,7 @@ export default function useTransformDataPosts(posts: IPost[] | undefined) {
                     }),
                 );
                 setPostsTransformed(dataTransfrom);
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error);
@@ -45,9 +46,8 @@ export default function useTransformDataPosts(posts: IPost[] | undefined) {
         if (posts && posts.length) {
             setIsLoading(true);
             getTransformDataPosts();
-            setIsLoading(false);
         }
     }, [posts]);
 
-    return {postsTransformed, isLoading};
+    return {postsTransformed, isLoading, setPostsTransformed};
 }

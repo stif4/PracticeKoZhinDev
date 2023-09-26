@@ -2,7 +2,8 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {URL_AVATAR, URL_BASE, URL_USER} from '../../constants/api';
 import coockiesService from '../../service/coockies.service';
 import {IUserUpdateSent} from '../../shared/Forms/UpdateUserForm/UpdateUserForm';
-import {setUser, logOut} from '../features/userSlice';
+import {setUser} from '../features/userSlice';
+import {logOut} from '../features/userSuncks';
 import {IErrorResponse, IUser} from './types';
 
 export const userApi = createApi({
@@ -34,6 +35,7 @@ export const userApi = createApi({
                     console.log(error);
                 }
             },
+            providesTags: ['User'],
         }),
         setAvatar: builder.mutation<IUser, FormData>({
             query(data) {
@@ -52,14 +54,17 @@ export const userApi = createApi({
                     console.log(error);
                 }
             },
+            invalidatesTags: ['User'],
         }),
         updateUser: builder.mutation<IUser, IUserUpdateSent>({
             query(data) {
+                const dataSent = {...data};
+                delete dataSent.avatar;
                 return {
                     url: `${URL_USER}`,
                     method: 'PATCH',
                     credentials: 'include',
-                    body: data,
+                    body: dataSent,
                 };
             },
             transformErrorResponse: (response) => {
@@ -70,7 +75,6 @@ export const userApi = createApi({
                 try {
                     const {data} = await queryFulfilled;
                     await dispatch(setUser(data));
-
                     if (args.avatar) {
                         await dispatch(userApi.endpoints.setAvatar.initiate(args.avatar));
                     }
@@ -78,6 +82,7 @@ export const userApi = createApi({
                     console.log(error);
                 }
             },
+            invalidatesTags: ['User'],
         }),
         deleteUser: builder.mutation<null, null>({
             query() {

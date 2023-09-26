@@ -9,6 +9,9 @@ export const URL_AVATAR = '/user/avatar';
 
 export const URL_FILE = '/file';
 
+export const URL_POST = '/post';
 export const URL_MYPOST = '/post/my-feed';
+export const URL_POST_IMG = '/post/image';
 export const URL_LIKEPOST = (id: number) => `/post/${id}/likes`;
+export const URL_TAGS = '/tag/search';
 //export const URL_IMGPOST = '/post/image';

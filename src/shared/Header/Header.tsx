@@ -1,10 +1,10 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
-import {getMe, getUrlAvatar} from '../../store/features/userSlice';
 import {useAppSelector} from '../../store/store';
 import Avatar from '../../ui/Avatar';
 import Button from '../../ui/Button/Button';
 import MenuBurger from '../MenuBurger/MenuBurger';
+import {getUrlAvatar, getMe} from '../../store/features/userSuncks';
 import './Header.scss';
 
 export interface IMenuArrayItem {

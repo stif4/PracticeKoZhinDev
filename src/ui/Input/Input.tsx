@@ -2,7 +2,7 @@ import React from 'react';
 import ProgressBarPassword from '../ProgressBarPassword';
 import './Input.scss';
 
-interface IInput {
+interface IInputProps {
     label: string;
     onChange: (
         e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -40,7 +40,7 @@ export default function Input({
     value,
     placeholder,
     withProgress,
-}: IInput) {
+}: IInputProps) {
     const [showPassword, setShowPassword] = React.useState<boolean>(INITAL_VALUE);
 
     const calssInput = error

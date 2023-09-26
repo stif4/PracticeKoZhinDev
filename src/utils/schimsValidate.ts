@@ -17,3 +17,9 @@ export const validatelastName = yup
     .required('Fill in the empty fields')
     .min(2, 'Lastname must be longer than or equal to 2 characters')
     .max(16, 'Lastname must be shorten than or equal to 16 characters');
+export const validateArray = yup.array().min(1, 'Укажите значение');
+export const validatePostTitle = yup.string().required('Fill in the empty fields').min(5, 'title must be longer than or equal to 5 characters');
+export const validatePostText = yup
+    .string()
+    .required('Fill in the empty fields')
+    .min(10, 'text must be longer than or equal to 10 characters');

@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {ROUTE_HOME} from '../../constants/routes';
 import LoginForm from '../../shared/Forms/LoginForm';
 import RegisterForm from '../../shared/Forms/RegisterForm';
-import {getMe} from '../../store/features/userSlice';
+import {getMe} from '../../store/features/userSuncks';
 import {useAppSelector} from '../../store/store';
 import TabsChoice from '../../ui/TabsChoice';
 import './AuthPage.scss';
@@ -14,7 +14,7 @@ export interface ILabelTab {
     path: string;
 }
 
-export enum EAuth {
+export const enum EAuth {
     login = 'login',
     register = 'register',
 }

@@ -8,7 +8,7 @@ import {ITag} from '../../store/api/types';
 import {IInformationBlock, IItem} from '../types/types';
 import './Post.scss';
 
-interface IPost {
+interface IPostProps {
     informationBlock?: IInformationBlock;
     urlImg?: string;
     title: string;
@@ -20,7 +20,7 @@ interface IPost {
     postId: number;
 }
 
-export default function Post({informationBlock, urlImg, title, text, tags, countLikes, isLiked, date, postId}: IPost) {
+export default function Post({informationBlock, urlImg, title, text, tags, countLikes, isLiked, date, postId}: IPostProps) {
     const handleDelete = () => {};
     const handleChage = () => {};
     const handleAttach = () => {};

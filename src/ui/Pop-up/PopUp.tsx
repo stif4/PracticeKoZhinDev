@@ -2,7 +2,7 @@ import React from 'react';
 import {IItem} from '../types/types';
 import './PopUp.scss';
 
-interface IPopUp {
+interface IPopUpProps {
     items: IItem[];
 }
 
@@ -11,7 +11,7 @@ const ITEM_CLASS_RED = 'PopUp__item_red';
 const CLASS_MENU_ACTIVE = 'PopUp__menu PopUp__menu_active';
 const CLASS_MENU_DEFULT = 'PopUp__menu';
 
-export default function PopUp({items}: IPopUp) {
+export default function PopUp({items}: IPopUpProps) {
     const [isShow, setIsShow] = React.useState<boolean>(false);
 
     const classMenu = isShow ? CLASS_MENU_ACTIVE : CLASS_MENU_DEFULT;

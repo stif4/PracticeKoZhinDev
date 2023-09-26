@@ -1,35 +1,38 @@
 import React from 'react';
 import {toast} from 'react-toastify';
-import useTransformDataPosts from '../../hooks/useTransformDataPosts';
-import {useGetMyPostsQuery} from '../../store/api/postApi';
+import useScrollFetchngPost from '../../hooks/useScrollFetcingPost';
 import {useDeleteUserMutation} from '../../store/api/userApi';
-import {getMe, getUrlAvatar, logOut} from '../../store/features/userSlice';
+import {logOut, getUrlAvatar, getMe} from '../../store/features/userSuncks';
 import {useAppDispatch, useAppSelector} from '../../store/store';
 import Button from '../../ui/Button';
 import InformationUser from '../../ui/InformationUser';
-import PostList from '../../ui/Post';
-import PostSkeleton from '../../ui/Post/PostSkeleton';
 import {IInformationBlock, IItem} from '../../ui/types/types';
 import ProfileModal from './modal/ProfileModal';
-import ProfilePaperSlide from './modal/ProfilePaperSlide';
+import ProfilePaperSlideCreatePost from './modal/ProfilePaperSlideCreatePost';
+import ProfilePaperSlideEdit from './modal/ProfilePaperSlideEdit';
 import './Profile';
 
 export default function Profile() {
-    const [isActivePaperSlide, setIsActivePaperSlide] = React.useState<boolean>(false);
+    const [isActivePaperSlideEdit, setIsActivePaperSlideEdit] = React.useState<boolean>(false);
+    const [isActivePaperSlideCreatePost, setIsActivePaperSlideCreatePost] = React.useState<boolean>(false);
     const [isActiveModal, setActiveModal] = React.useState<boolean>(false);
 
     const me = useAppSelector(getMe());
+
     const {urlAvatar, loading: isLoadingAvatar} = useAppSelector(getUrlAvatar());
 
-    const {data: posts, isLoading: isLoadingPosts} = useGetMyPostsQuery(null);
-    const [deleteUser] = useDeleteUserMutation();
+    const {getPosts, userPosts: posts} = useScrollFetchngPost();
 
-    const {postsTransformed, isLoading: isLoadingTransform} = useTransformDataPosts(posts);
+    const [deleteUser] = useDeleteUserMutation();
 
     const dispatch = useAppDispatch();
 
     const toggleEditProffile = () => {
-        setIsActivePaperSlide((prev) => !prev);
+        setIsActivePaperSlideEdit((prev) => !prev);
+    };
+
+    const toggleCreatePost = () => {
+        setIsActivePaperSlideCreatePost((prev) => !prev);
     };
 
     const toggleModal = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,22 +73,11 @@ export default function Profile() {
         return undefined;
     };
 
-    const getPosts = () => {
-        if (!isLoadingTransform && !isLoadingPosts) {
-            if (postsTransformed && postsTransformed.length) {
-                return <PostList posts={postsTransformed} />;
-            }
-            return <></>;
-        }
-        return <PostSkeleton />;
-    };
-
     return (
         <>
             <section className="Profile">
                 <div className="Profile__container">
                     <h1 className="Profile__mainTitle">Мой профиль</h1>
-
                     {me && (
                         <div className="Profile__informationUser">
                             <InformationUser
@@ -103,20 +95,25 @@ export default function Profile() {
                                     <Button
                                         label="Создать пост"
                                         className="Button__main_medium"
+                                        onClick={toggleCreatePost}
                                     />
                                 </div>
                             </InformationUser>
                         </div>
                     )}
-
-                    {postsTransformed?.length && <h3 className="Profile__subTitle">Мои посты:</h3>}
+                    {posts?.length ? <h3 className="Profile__subTitle">Мои посты:</h3> : <></>}
                     <div className="Profile__posts">{getPosts()}</div>
                 </div>
             </section>
 
-            <ProfilePaperSlide
-                isActive={isActivePaperSlide}
+            <ProfilePaperSlideEdit
+                isActive={isActivePaperSlideEdit}
                 toggleEditProffile={toggleEditProffile}
+            />
+
+            <ProfilePaperSlideCreatePost
+                isActive={isActivePaperSlideCreatePost}
+                toggleCreatePost={toggleCreatePost}
             />
 
             <ProfileModal

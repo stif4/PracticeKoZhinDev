@@ -1,4 +1,4 @@
-.ProfilePaperSlide {
+.ProfilePaperSlideCreatePost {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,10 +10,18 @@
         padding-left: 20px;
     }
 
-    &__Button {
+    &__button {
         margin-top: 8px;
         margin-bottom: 16px;
         width: max-content;
         margin-left: -8px;
+    }
+
+    &__title {
+        font-weight: 700;
+        line-height: 32px;
+        font-size: var(--title-base-size);
+        color: var(--text-gray-darck-color);
+        margin-bottom: 24px;
     }
 }

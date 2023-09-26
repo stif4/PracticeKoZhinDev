@@ -3,7 +3,7 @@ import Skeleton from 'react-loading-skeleton';
 import {IInformationBlock} from '../types/types';
 import './Avatar.scss';
 
-interface IAvatar {
+interface IAvatarProps {
     informationBlock?: IInformationBlock;
     withInformationBlock?: boolean;
     withOnline?: boolean;
@@ -12,9 +12,8 @@ interface IAvatar {
     isLoading?: boolean;
 }
 
-export default function Avatar({informationBlock, withInformationBlock, withOnline, urlImg, size, isLoading}: IAvatar) {
+export default function Avatar({informationBlock, withInformationBlock, withOnline, urlImg, size, isLoading}: IAvatarProps) {
     const {firstName, lastName, nickname} = {...informationBlock};
-
     const resizeImgAvatar = () => {
         if (size) {
             return {width: `${size}px`, height: `${size}px`};

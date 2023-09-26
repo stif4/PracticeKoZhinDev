@@ -3,11 +3,11 @@ import {ITag} from '../../store/api/types';
 import Tag from './Tag';
 import './TagList.scss';
 
-interface ITagList {
+interface ITagListProps {
     tags: ITag[];
 }
 
-export default function TagList({tags}: ITagList) {
+export default function TagList({tags}: ITagListProps) {
     return (
         <div className="TagList">
             <div className="TagList__container">

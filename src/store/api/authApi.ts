@@ -5,9 +5,7 @@ import {TRegisterInput} from '../../shared/Forms/RegisterForm/RegisterForm';
 import {IErrorResponse, IGenericResponse, IJWTDecode, IResponceLogin} from './types';
 import {userApi} from './userApi';
 import coockiesService from '../../service/coockies.service';
-import {URL_LOGIN, URL_REFRESH, URL_REGISTER} from '../../constants/api';
-
-const URL_BASE = process.env.REACT_APP_SERVER_ENDPOINT as string;
+import {URL_BASE, URL_LOGIN, URL_REFRESH, URL_REGISTER} from '../../constants/api';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -31,8 +29,8 @@ export const authApi = createApi({
                 try {
                     await queryFulfilled;
                     await dispatch(authApi.endpoints.login.initiate({password: args.password, email: args.email, remember: ECheck.unchecked}));
-                    if (args.avatar !== null) {
-                        await dispatch(userApi.endpoints.setAvatar.initiate(args.avatar));
+                    if (args.img !== null) {
+                        await dispatch(userApi.endpoints.setAvatar.initiate(args.img));
                     }
                 } catch (error) {
                     console.log(error);

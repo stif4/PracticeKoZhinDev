@@ -7,7 +7,7 @@ import Card from '../Card';
 import './informationUser.scss';
 import '../../pages/Profile/Profile.scss';
 
-interface IInformationUser {
+interface IInformationUserProps {
     informationBlock: IInformationBlock;
     items: IItem[];
     urlAvatar: string | undefined;
@@ -16,7 +16,7 @@ interface IInformationUser {
     isLoadingAvatar: boolean;
 }
 
-export default function InformationUser({informationBlock, items, children, urlAvatar, discription, isLoadingAvatar}: IInformationUser) {
+export default function InformationUser({informationBlock, items, children, urlAvatar, discription, isLoadingAvatar}: IInformationUserProps) {
     return (
         <div className="informationUser">
             <Card>

@@ -8,6 +8,8 @@ const FILE_NOT_FOUND = 'File not found';
 const LASTNAME_SHORT_LENGTH = 'Lastname must be longer than or equal to 2 characters';
 const LASTNAME_LONG_LENGTH = 'Lastname must be shorten than or equal to 16 characters';
 const EMPTY_FIELD = 'Fill in the empty fields';
+const POST_TITLE = 'title must be longer than or equal to 5 characters';
+const POST_TEXT = 'text must be longer than or equal to 10 characters';
 
 export const ERROR_OBJECT = {
     [USER_NOT_FOUND]: 'Пользователь не найден',
@@ -20,4 +22,6 @@ export const ERROR_OBJECT = {
     [EMPTY_FIELD]: 'Заполните пустые поля',
     [USER_EXISTS]: 'Пользователь уже зарегестрирован',
     [FILE_NOT_FOUND]: 'Файл не найден',
+    [POST_TITLE]: 'Заголовок не менее 5 символов',
+    [POST_TEXT]: 'Текст поста не менее 10 символов',
 };

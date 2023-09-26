@@ -1,6 +1,3 @@
-import {Omit} from '@reduxjs/toolkit/dist/tsHelpers';
-import {TRegisterInput} from '../../shared/Forms/RegisterForm/RegisterForm';
-
 //----// User //----//
 export interface ISubscriptions {
     id: number;
@@ -55,8 +52,15 @@ export interface IJWTDecode {
 
 //----// Post //----//
 export interface ITag {
+    id: string;
     title: string;
 }
+export interface ITagNormolaized {
+    value: string;
+    label: string;
+    id: string;
+}
+
 export interface ICreator {
     id: number;
     firstName: string;
@@ -97,4 +101,10 @@ export interface IPostTransform {
     imageUrl: string | undefined;
     createTime: string;
     updateTime: string;
+}
+
+///// enums /////
+export const enum EPositionLoading {
+    UP = 'up',
+    DOWN = 'down',
 }

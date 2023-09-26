@@ -2,7 +2,7 @@ import React from 'react';
 import {ERROR_OBJECT} from '../../constants/errors';
 import './Error.scss';
 
-interface IError {
+interface IErrorProps {
     message: string;
     place?: 'login' | 'register';
 }
@@ -15,7 +15,7 @@ const MESSAGE_AUTH_DEFFULT = 'Не правильный email или парол�
 const TITLE_AUTH = 'Авторизации';
 const TITLE_REGISTER = 'Регистрации';
 
-export default function Error({message, place}: IError) {
+export default function Error({message, place}: IErrorProps) {
     const getMessage = () => {
         const errorTranslated = message in ERROR_OBJECT ? (ERROR_OBJECT as IErrorObject)[message] : message;
         if (errorTranslated) {

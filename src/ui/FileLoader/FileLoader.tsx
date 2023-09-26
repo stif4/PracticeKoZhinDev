@@ -7,12 +7,13 @@ const BUTTON_CLASS_NAME = 'Button__main_empty Button__main_empty_colorGray Butto
 const ERROR_MESSAGE = 'Please select a file!';
 const INDEX_UPLOADED_FILE = 0;
 
-interface IFileLoder {
+interface IFileLoderProps {
     onUploadFile: (file: FormData | null) => void;
     fileURLDefualt?: string;
+    label: string;
 }
 
-export default function FileLoder({onUploadFile, fileURLDefualt}: IFileLoder) {
+export default function FileLoder({onUploadFile, fileURLDefualt, label}: IFileLoderProps) {
     const filePicker = React.useRef<HTMLInputElement>(null);
     const [fileURL, setFileURL] = React.useState<string | ArrayBuffer | null>(null);
     const [selectFile, setSelectFile] = React.useState<File | null>(null);
@@ -78,11 +79,11 @@ export default function FileLoder({onUploadFile, fileURLDefualt}: IFileLoder) {
             fileURL={fileURL}
             onReset={handleReset}
             onChange={handlePick}
-            label="Фото профиля"
+            label={label}
         />
     ) : (
         <Button
-            upLabel="Фото профиля"
+            upLabel={label}
             label="Нажмите для загрузки"
             className={BUTTON_CLASS_NAME}
             icon="/icons/import.svg"

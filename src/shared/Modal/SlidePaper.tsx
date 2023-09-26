@@ -1,7 +1,7 @@
 import React from 'react';
 import './SlidePaper.scss';
 
-interface ISlidePaper {
+interface ISlidePaperProps {
     children: React.ReactNode;
     isActive: boolean;
 }
@@ -9,7 +9,7 @@ interface ISlidePaper {
 const SLIDE_PAPER_DEFULT = 'SlidePaper';
 const SLIDE_PAPER_ACTIVE = 'SlidePaper SlidePaper_active';
 
-export default function SlidePaper({children, isActive}: ISlidePaper) {
+export default function SlidePaper({children, isActive}: ISlidePaperProps) {
     const className = isActive ? SLIDE_PAPER_ACTIVE : SLIDE_PAPER_DEFULT;
 
     React.useEffect(() => {

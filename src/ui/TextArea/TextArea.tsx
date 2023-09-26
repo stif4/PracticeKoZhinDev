@@ -2,27 +2,23 @@ import React from 'react';
 import './TextArea.scss';
 
 const INDEX_NAME_ELEMENT = 0;
-interface ITextArea {
-    onChange: (
-        e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => void;
+const TEXTAREA_CLASS_BASE = 'TextArea__main ';
+const TEXTAREA_CLASS_ERROR = 'TextArea__main_error';
+
+interface ITextAreaProps {
+    onChange: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     value: string;
     name: string;
     id: string;
     placeholder: string;
     label: string;
+    error?: boolean;
     onReset: (name: string) => void;
 }
 
-export default function TextArea({
-    onChange,
-    value,
-    name,
-    id,
-    placeholder,
-    label,
-    onReset,
-}: ITextArea) {
+export default function TextArea({onChange, value, name, id, placeholder, label, error, onReset}: ITextAreaProps) {
+    const calssTextArea = error ? TEXTAREA_CLASS_BASE + TEXTAREA_CLASS_ERROR : TEXTAREA_CLASS_BASE;
+
     const onKeyPressHandler = () => {};
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -36,7 +32,7 @@ export default function TextArea({
             <div className="TextArea__container">
                 <div className="TextArea__label">{label}</div>
                 <textarea
-                    className="TextArea__main"
+                    className={calssTextArea}
                     name={name}
                     placeholder={placeholder}
                     onChange={onChange}
