@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {EPositionLoading, IPostTransform, IUser} from '../api/types';
+import {EPositionLoading, IPost, IPostTransform, IUser} from '../api/types';
 
 interface IURLAvatar {
     urlAvatar: string | undefined;
@@ -16,16 +16,21 @@ interface IPostsPayloadAction {
     posts: IPostTransform[];
     isCreated?: boolean;
 }
-
+interface IIsEditPost {
+    id: number | null;
+    isLoading: boolean;
+}
 interface IUserState {
     user: IUser | null;
     avatar: IURLAvatar;
     userPosts: IUserPosts;
+    isEditPost: IIsEditPost;
 }
 
 const initialState: IUserState = {
     user: null,
     avatar: {urlAvatar: undefined, loading: false},
+    isEditPost: {id: null, isLoading: false},
     userPosts: {userPosts: null, lodaing: {isLoading: false, postion: EPositionLoading.DOWN}, isAll: false},
 };
 
@@ -35,6 +40,7 @@ export const userSlice = createSlice({
     reducers: {
         logout: () => initialState,
         setUser: (state, action: PayloadAction<IUser>) => {
+            // const newUser = {...action.payload, subscriptions: [...action.payload.subscriptions]};
             state.user = action.payload;
         },
 
@@ -73,6 +79,34 @@ export const userSlice = createSlice({
             state.userPosts.lodaing.isLoading = false;
         },
 
+        editPost: (state, action: PayloadAction<IPostTransform>) => {
+            state.userPosts.userPosts = state.userPosts.userPosts && state.userPosts.userPosts.map((post) => {
+                if (post.id === action.payload.id) {
+                    return action.payload;
+                }
+                return post;
+            });
+            state.isEditPost.isLoading = false;
+        },
+        pendingEditPost: (state, action:PayloadAction<number>) => {
+            state.isEditPost.id = action.payload;
+            state.isEditPost.isLoading = true;
+        },
+        failedEditPost: (state) => {
+            state.isEditPost.isLoading = false;
+        },
+
+        resetMyPosts: (state) => {
+            state.userPosts.userPosts = null;
+            state.userPosts.isAll = false;
+        },
+        setPinPost: (state, action: PayloadAction<IPostTransform>) => {
+            if (state.userPosts.userPosts) {
+                state.userPosts.userPosts = [action.payload, ...state.userPosts.userPosts];
+            } else {
+                state.userPosts.userPosts = [action.payload];
+            }
+        },
         postLiked: (state, action: PayloadAction<{id: number; likesCount: number}>) => {
             state.userPosts.userPosts = state.userPosts.userPosts && state.userPosts.userPosts?.map((post) => {
                 if (post.id === action.payload.id) {
@@ -81,11 +115,15 @@ export const userSlice = createSlice({
                 return post;
             });
         },
+        postDelite: (state, action: PayloadAction<number>) => {
+            state.userPosts.userPosts = state.userPosts.userPosts && state.userPosts.userPosts?.filter((post) => post.id !== action.payload);
+        },
     },
 });
 
 export default userSlice.reducer;
-export const {logout,
+export const {
+    logout,
     setUser,
     pendingAvatar,
     fulfilledAvatar,
@@ -93,4 +131,11 @@ export const {logout,
     pendingPosts,
     fulfilledPosts,
     failedPosts,
-    postLiked} = userSlice.actions;
+    postLiked,
+    resetMyPosts,
+    postDelite,
+    setPinPost,
+    editPost,
+    failedEditPost,
+    pendingEditPost,
+} = userSlice.actions;

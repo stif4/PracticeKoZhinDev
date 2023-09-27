@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {URL_AVATAR, URL_BASE, URL_USER} from '../../constants/api';
+import {URL_BASE, URL_USER} from '../../constants/api';
 import coockiesService from '../../service/coockies.service';
 import {IUserUpdateSent} from '../../shared/Forms/UpdateUserForm/UpdateUserForm';
 import {setUser} from '../features/userSlice';
@@ -23,7 +23,7 @@ export const userApi = createApi({
         getUser: builder.query<IUser, number | null>({
             query(id) {
                 return {
-                    url: `${URL_USER}/${id}`,
+                    url: `${URL_USER.DEFUALT}/${id}`,
                     credentials: 'include',
                 };
             },
@@ -40,7 +40,7 @@ export const userApi = createApi({
         setAvatar: builder.mutation<IUser, FormData>({
             query(data) {
                 return {
-                    url: `${URL_AVATAR}`,
+                    url: `${URL_USER.AVATAR}`,
                     method: 'POST',
                     credentials: 'include',
                     body: data,
@@ -61,7 +61,7 @@ export const userApi = createApi({
                 const dataSent = {...data};
                 delete dataSent.avatar;
                 return {
-                    url: `${URL_USER}`,
+                    url: `${URL_USER.DEFUALT}`,
                     method: 'PATCH',
                     credentials: 'include',
                     body: dataSent,
@@ -87,7 +87,7 @@ export const userApi = createApi({
         deleteUser: builder.mutation<null, null>({
             query() {
                 return {
-                    url: `${URL_USER}`,
+                    url: `${URL_USER.DEFUALT}`,
                     method: 'DELETE',
                     credentials: 'include',
                 };
@@ -101,6 +101,40 @@ export const userApi = createApi({
                 }
             },
         }),
+        pinPost: builder.mutation<IUser, number>({
+            query(id) {
+                return {
+                    url: `${URL_USER.PIN_POST}/${id}`,
+                    method: 'PATCH',
+                    credentials: 'include',
+                };
+            },
+            async onQueryStarted(args, {dispatch, queryFulfilled}) {
+                try {
+                    const {data} = await queryFulfilled;
+                    dispatch(setUser(data));
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+        }),
+        unpinPost: builder.mutation<IUser, null>({
+            query() {
+                return {
+                    url: `${URL_USER.UNPIN_POST}`,
+                    method: 'PATCH',
+                    credentials: 'include',
+                };
+            },
+            async onQueryStarted(args, {dispatch, queryFulfilled}) {
+                try {
+                    const {data} = await queryFulfilled;
+                    dispatch(setUser(data));
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+        }),
     }),
 });
-export const {useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation} = userApi;
+export const {useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation, usePinPostMutation, useUnpinPostMutation} = userApi;

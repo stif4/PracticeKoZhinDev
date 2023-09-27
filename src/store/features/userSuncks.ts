@@ -69,3 +69,4 @@ export const parseAvatar = (id: number) => async (dispatch: AppDispatch) => {
 export const getMe = () => (state: RootState) => state.userState.user;
 export const getUrlAvatar = () => (state: RootState) => state.userState.avatar;
 export const getMyPosts = () => (state: RootState) => state.userState.userPosts;
+export const getIsEditPost = () => (state: RootState) => state.userState.isEditPost;

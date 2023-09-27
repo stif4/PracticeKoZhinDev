@@ -38,7 +38,7 @@ function AppLoader({children}: IAppLoader) {
         }
     }, [me?.avatarId]);
 
-    if (isLoading) {
+    if (isLoading || (coockiesService().getRefreshtoken() && !me)) {
         return <div>...Loading</div>;
     }
 

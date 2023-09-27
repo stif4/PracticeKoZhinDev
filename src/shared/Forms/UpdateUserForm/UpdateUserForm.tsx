@@ -227,6 +227,7 @@ export default function UpdateUserForm({closeForm}: IUpdateUserFormProps) {
                         onUploadFile={handleUploadFile}
                         fileURLDefualt={avatarURL.urlAvatar}
                         label="Фото профиля"
+                        isClear={!avatarURL.urlAvatar}
                     />
                 </div>
                 <div className="UpdateUserForm__textArea">

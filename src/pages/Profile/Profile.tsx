@@ -1,55 +1,39 @@
 import React from 'react';
 import {toast} from 'react-toastify';
 import useScrollFetchngPost from '../../hooks/useScrollFetcingPost';
-import {useDeleteUserMutation} from '../../store/api/userApi';
 import {logOut, getUrlAvatar, getMe} from '../../store/features/userSuncks';
 import {useAppDispatch, useAppSelector} from '../../store/store';
 import Button from '../../ui/Button';
 import InformationUser from '../../ui/InformationUser';
 import {IInformationBlock, IItem} from '../../ui/types/types';
-import ProfileModal from './modal/ProfileModal';
-import ProfilePaperSlideCreatePost from './modal/ProfilePaperSlideCreatePost';
-import ProfilePaperSlideEdit from './modal/ProfilePaperSlideEdit';
+import useCreatePost from './hooks/useCreatePost';
+import useDeliteProfile from './hooks/useDeliteProfile';
+import useEditPost from './hooks/useEditPost';
+import useEditProfile from './hooks/useEditProfile';
 import './Profile';
 
 export default function Profile() {
-    const [isActivePaperSlideEdit, setIsActivePaperSlideEdit] = React.useState<boolean>(false);
-    const [isActivePaperSlideCreatePost, setIsActivePaperSlideCreatePost] = React.useState<boolean>(false);
-    const [isActiveModal, setActiveModal] = React.useState<boolean>(false);
-
     const me = useAppSelector(getMe());
-
     const {urlAvatar, loading: isLoadingAvatar} = useAppSelector(getUrlAvatar());
-
-    const {getPosts, userPosts: posts} = useScrollFetchngPost();
-
-    const [deleteUser] = useDeleteUserMutation();
 
     const dispatch = useAppDispatch();
 
-    const toggleEditProffile = () => {
-        setIsActivePaperSlideEdit((prev) => !prev);
-    };
+    /* Delite Profile*/
+    const {getProfileDeliteModal, toggleModalDelite} = useDeliteProfile();
 
-    const toggleCreatePost = () => {
-        setIsActivePaperSlideCreatePost((prev) => !prev);
-    };
+    /* Edit Profile */
+    const {toggleEditProffile, getProfileEditModal} = useEditProfile();
 
-    const toggleModal = (event: React.MouseEvent<HTMLElement>) => {
-        event.stopPropagation();
-        setActiveModal((prev) => !prev);
-    };
+    /* Create Post */
+    const {toggleCreatePost, getCreatePostModal} = useCreatePost();
 
-    const handelDelete = async () => {
-        try {
-            await deleteUser(null);
-            toast('Акаунт успешно удален', {type: 'success'});
-        } catch (error) {
-            toast('Что то пошло ни так', {type: 'error'});
-            console.log(error);
-        }
-    };
+    /* Edit Post */
+    const {handleEditPost, getEditPostModal} = useEditPost();
 
+    /* Get PostList with LazyScroll*/
+    const {getPosts, userPosts: posts} = useScrollFetchngPost(me, handleEditPost, urlAvatar);
+
+    /* ---------------- */
     const handleLogOut = () => {
         try {
             dispatch(logOut());
@@ -62,7 +46,7 @@ export default function Profile() {
     const ITEMS: IItem[] = [
         {text: 'Редактировать профиль', addClass: '', action: toggleEditProffile},
         {text: 'Выйти из профиля', addClass: '', action: handleLogOut},
-        {text: 'Удалить профиль', addClass: 'red', action: toggleModal},
+        {text: 'Удалить профиль', addClass: 'red', action: toggleModalDelite},
     ];
 
     const getInformationBlock = () => {
@@ -75,10 +59,11 @@ export default function Profile() {
 
     return (
         <>
-            <section className="Profile">
-                <div className="Profile__container">
-                    <h1 className="Profile__mainTitle">Мой профиль</h1>
-                    {me && (
+            {me && (
+                <section className="Profile">
+                    <div className="Profile__container">
+                        <h1 className="Profile__mainTitle">Мой профиль</h1>
+
                         <div className="Profile__informationUser">
                             <InformationUser
                                 urlAvatar={urlAvatar}
@@ -100,27 +85,17 @@ export default function Profile() {
                                 </div>
                             </InformationUser>
                         </div>
-                    )}
-                    {posts?.length ? <h3 className="Profile__subTitle">Мои посты:</h3> : <></>}
-                    <div className="Profile__posts">{getPosts()}</div>
-                </div>
-            </section>
 
-            <ProfilePaperSlideEdit
-                isActive={isActivePaperSlideEdit}
-                toggleEditProffile={toggleEditProffile}
-            />
+                        {posts?.length ? <h3 className="Profile__subTitle">Мои посты:</h3> : <></>}
+                        <div className="Profile__posts">{getPosts()}</div>
+                    </div>
+                </section>
+            )}
 
-            <ProfilePaperSlideCreatePost
-                isActive={isActivePaperSlideCreatePost}
-                toggleCreatePost={toggleCreatePost}
-            />
-
-            <ProfileModal
-                onActive={toggleModal}
-                isActive={isActiveModal}
-                onDelite={handelDelete}
-            />
+            <>{getEditPostModal()}</>
+            <>{getCreatePostModal()}</>
+            <>{getProfileDeliteModal()}</>
+            <>{getProfileEditModal()}</>
         </>
     );
 }

@@ -9,11 +9,12 @@ const INDEX_UPLOADED_FILE = 0;
 
 interface IFileLoderProps {
     onUploadFile: (file: FormData | null) => void;
+    isClear: boolean;
     fileURLDefualt?: string;
     label: string;
 }
 
-export default function FileLoder({onUploadFile, fileURLDefualt, label}: IFileLoderProps) {
+export default function FileLoder({onUploadFile, fileURLDefualt, label, isClear}: IFileLoderProps) {
     const filePicker = React.useRef<HTMLInputElement>(null);
     const [fileURL, setFileURL] = React.useState<string | ArrayBuffer | null>(null);
     const [selectFile, setSelectFile] = React.useState<File | null>(null);
@@ -72,6 +73,12 @@ export default function FileLoder({onUploadFile, fileURLDefualt, label}: IFileLo
             setFileURL(fileURLDefualt);
         }
     }, [fileURLDefualt]);
+
+    React.useEffect(() => {
+        if (isClear) {
+            handleReset();
+        }
+    }, [isClear]);
 
     const visualComponent = () => fileURL ? (
         <FileShow

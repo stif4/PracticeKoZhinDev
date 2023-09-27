@@ -17,7 +17,10 @@ export default function PostSkeleton({marginTop = '0px', marginBottom = '0px'}: 
         >
             <Card>
                 <div className="Post__container">
-                    <div className="Post__header">
+                    <div
+                        className="Post__header"
+                        style={{marginBottom: '16px'}}
+                    >
                         <Avatar
                             size={50}
                             isLoading

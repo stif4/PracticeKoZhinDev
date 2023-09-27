@@ -163,6 +163,7 @@ export default function RegisterForm() {
                     <FileLoder
                         onUploadFile={handleUploadFile}
                         label="Фото профиля"
+                        isClear={uploadedFile === null}
                     />
                 </div>
                 <div className="RegisterForm__textArea">

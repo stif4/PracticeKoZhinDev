@@ -6,9 +6,11 @@ import './PostList.scss';
 interface IPostListProps {
     posts: IPostTransform[] | null;
     withInformationBlock?: boolean;
+    urlAvatar?: string;
+    onEditPost?: (post: IPostTransform) => void;
 }
 
-export default function PostList({posts, withInformationBlock}: IPostListProps) {
+export default function PostList({posts, urlAvatar, withInformationBlock, onEditPost}: IPostListProps) {
     const getInformationBlock = (post: IPostTransform) => {
         if (withInformationBlock) {
             const {firstName, lastName, nickname} = post.creator;
@@ -26,16 +28,11 @@ export default function PostList({posts, withInformationBlock}: IPostListProps) 
             <div className="PostList__container">
                 {posts.map((post) => (
                     <Post
+                        urlAvatar={urlAvatar}
                         key={post.id}
-                        postId={post.id}
                         informationBlock={getInformationBlock(post)}
-                        urlImg={post.imageUrl}
-                        title={post.title}
-                        text={post.text}
-                        tags={post.tags}
-                        countLikes={post.likesCount}
-                        isLiked={post.isLiked}
-                        date={post.createTime}
+                        postTransformed={post}
+                        onEditPost={onEditPost}
                     />
                 ))}
             </div>
