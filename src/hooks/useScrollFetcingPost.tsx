@@ -28,7 +28,7 @@ export default function useScrollFetchngPost(me: IUser | null, toggleEditPost: (
     React.useEffect(() => {
         const onScroll = () => {
             const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
-            if (scrolledToBottom && !isFetchingPostList && !isAll) {
+            if (scrolledToBottom && !lodaing.isLoading && !isFetchingPostList && !isAll) {
                 setCurrentPage(currentPage + 1);
             }
         };
@@ -36,7 +36,7 @@ export default function useScrollFetchngPost(me: IUser | null, toggleEditPost: (
         return () => {
             document.removeEventListener('scroll', onScroll);
         };
-    }, [currentPage, isFetchingPostList]);
+    }, [currentPage, isFetchingPostList, lodaing]);
 
     React.useEffect(() => {
         if (me && me.pinnedPostId > 0) {
