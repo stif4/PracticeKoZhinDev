@@ -20,8 +20,8 @@ export const userApi = createApi({
     }),
     tagTypes: ['User'],
     endpoints: (builder) => ({
-        getUser: builder.query<IUser, number | null>({
-            query(id) {
+        getUser: builder.query<IUser, {id: number | null; isMe?: boolean}>({
+            query({id}) {
                 return {
                     url: `${URL_USER.DEFUALT}/${id}`,
                     credentials: 'include',
@@ -30,7 +30,9 @@ export const userApi = createApi({
             async onQueryStarted(args, {dispatch, queryFulfilled}) {
                 try {
                     const {data} = await queryFulfilled;
-                    dispatch(setUser(data));
+                    if (args.isMe) {
+                        dispatch(setUser(data));
+                    }
                 } catch (error) {
                     console.log(error);
                 }

@@ -1,0 +1,31 @@
+.commentBlock {
+    width: 100%;
+    &__container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    &__isShow {
+        width: 100%;
+    }
+    &__titleContainer {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+    &__title {
+        font-size: var(--subtitle-base-size);
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 0em;
+        text-align: left;
+    }
+    &__list {
+        width: 100%;
+        margin-bottom: 32px;
+    }
+    &__form {
+        width: 100%;
+    }
+}

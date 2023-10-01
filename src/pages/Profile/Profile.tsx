@@ -10,6 +10,7 @@ import useCreatePost from './hooks/useCreatePost';
 import useDeliteProfile from './hooks/useDeliteProfile';
 import useEditPost from './hooks/useEditPost';
 import useEditProfile from './hooks/useEditProfile';
+import useShowPostById from './hooks/useShowPostById';
 import './Profile';
 
 export default function Profile() {
@@ -30,8 +31,11 @@ export default function Profile() {
     /* Edit Post */
     const {handleEditPost, getEditPostModal} = useEditPost();
 
+    /* Show Post By Id */
+    const {getPostByIdModal, handlePostIdShow} = useShowPostById();
+
     /* Get PostList with LazyScroll*/
-    const {getPosts, userPosts: posts} = useScrollFetchngPost(me, handleEditPost, urlAvatar);
+    const {getPosts, userPosts: posts} = useScrollFetchngPost(me, handleEditPost, handlePostIdShow, urlAvatar);
 
     /* ---------------- */
     const handleLogOut = () => {
@@ -96,6 +100,7 @@ export default function Profile() {
             <>{getCreatePostModal()}</>
             <>{getProfileDeliteModal()}</>
             <>{getProfileEditModal()}</>
+            <>{getPostByIdModal()}</>
         </>
     );
 }

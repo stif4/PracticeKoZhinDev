@@ -32,18 +32,44 @@ export default function PostSkeleton({marginTop = '0px', marginBottom = '0px'}: 
                         </div>
                     </div>
 
-                    <Skeleton style={{width: '100%', height: '150px'}} />
+                    <Skeleton
+                        style={{width: '100%', height: '120px'}}
+                        borderRadius={8}
+                    />
 
-                    <h2 className="Post__title">
-                        <Skeleton />
+                    <h2
+                        className="Post__title"
+                        style={{marginTop: '16px'}}
+                    >
+                        <Skeleton width="40%" />
                     </h2>
 
                     <p className="Post__text">
-                        <Skeleton />
+                        <Skeleton height={50} />
                     </p>
 
-                    <div className="Post__tegs">
-                        <Skeleton />
+                    <div
+                        className="Post__tags"
+                        style={{display: 'flex'}}
+                    >
+                        <div style={{width: '12%', marginRight: '8px'}}>
+                            <Skeleton
+                                className="postPageSkeleton__tag"
+                                borderRadius={4}
+                            />
+                        </div>
+                        <div style={{width: '12%', marginRight: '8px'}}>
+                            <Skeleton
+                                className="postPageSkeleton__tag"
+                                borderRadius={4}
+                            />
+                        </div>
+                        <div style={{width: '12%', marginRight: '8px'}}>
+                            <Skeleton
+                                className="postPageSkeleton__tag"
+                                borderRadius={4}
+                            />
+                        </div>
                     </div>
 
                     <div className="Post__bottom">

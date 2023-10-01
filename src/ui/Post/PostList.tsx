@@ -8,9 +8,10 @@ interface IPostListProps {
     withInformationBlock?: boolean;
     urlAvatar?: string;
     onEditPost?: (post: IPostTransform) => void;
+    onPostIdShow?: (postId: number) => void;
 }
 
-export default function PostList({posts, urlAvatar, withInformationBlock, onEditPost}: IPostListProps) {
+export default function PostList({posts, urlAvatar, withInformationBlock, onEditPost, onPostIdShow}: IPostListProps) {
     const getInformationBlock = (post: IPostTransform) => {
         if (withInformationBlock) {
             const {firstName, lastName, nickname} = post.creator;
@@ -33,6 +34,7 @@ export default function PostList({posts, urlAvatar, withInformationBlock, onEdit
                         informationBlock={getInformationBlock(post)}
                         postTransformed={post}
                         onEditPost={onEditPost}
+                        onPostIdShow={onPostIdShow}
                     />
                 ))}
             </div>

@@ -8,8 +8,8 @@ interface ILikeProps {
     postId: number;
 }
 
-const URL_SVG_EMPTY_HEART = './icons/heart.svg';
-const URL_SVG_FILL_HEART = './icons/fillheart.svg';
+const URL_SVG_EMPTY_HEART = '../icons/heart.svg';
+const URL_SVG_FILL_HEART = '../icons/fillheart.svg';
 
 export default function Like({count, isLiked, postId}: ILikeProps) {
     const [isLike, setIsLike] = React.useState<boolean>(isLiked);

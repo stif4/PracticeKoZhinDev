@@ -24,7 +24,9 @@ export const URL_POST = {
     DEFUALT: PATH_POST,
     MY_POSTS: PATH_POST + '/my-feed',
     POST_IMGT: PATH_POST + '/image',
-    LIKEPOST: (id: number) => PATH_POST + `/${id}/likes`,
+    LIKEPOST: (postId: number) => PATH_POST + `/${postId}/likes`,
+    COMMENT_CREATE: (postId: number) => PATH_POST + `/${postId}/comments`,
+    COMMENT_DELITE: (postId: number, commentId: number) => PATH_POST + `/${postId}/comments/${commentId}`,
 };
 
 // export const URL_POST = '/post';

@@ -249,10 +249,7 @@ export default function UpdateUserForm({closeForm}: IUpdateUserFormProps) {
                 </div>
                 {(!isValid || isErrorUpdate) && (
                     <div className="UpdateUserForm__error">
-                        <Error
-                            place="register"
-                            message={getErrorMessage()}
-                        />
+                        <Error message={getErrorMessage()} />
                     </div>
                 )}
             </div>

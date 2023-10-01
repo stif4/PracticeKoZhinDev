@@ -65,7 +65,7 @@ export const authApi = createApi({
                     };
                     coockiesService().setTookens(authData);
                     if (accessDecod) {
-                        await dispatch(userApi.endpoints.getUser.initiate(accessDecod.id));
+                        await dispatch(userApi.endpoints.getUser.initiate({id: accessDecod.id, isMe: true}));
                     }
                 } catch (error) {
                     console.log(error);
@@ -94,7 +94,7 @@ export const authApi = createApi({
                         };
                         coockiesService().setTookens(authData);
                         if (accessDecod) {
-                            await dispatch(userApi.endpoints.getUser.initiate(accessDecod.id));
+                            await dispatch(userApi.endpoints.getUser.initiate({id: accessDecod.id, isMe: true}));
                         }
                     } catch (error) {
                         console.log(error);

@@ -2,12 +2,13 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {URL_BASE, URL_POST, URL_TAGS} from '../../constants/api';
 import coockiesService from '../../service/coockies.service';
 import transformDataPosts from '../../service/transformDataPosts.service';
+import {ICreateComment} from '../../shared/Forms/CommentForm/CommentForm';
 import {TCreateInput} from '../../shared/Forms/CreatePostForm/CreatePostFrorm';
 import {TEditInput} from '../../shared/Forms/EditPostForm/EditPostForm';
 import {normalizationTags} from '../../utils/tagsNormalization';
 import {editPost, postDelite, postLiked} from '../features/userSlice';
 import {setPosts} from '../features/userSuncks';
-import {IErrorResponse, IPost, IPostTransform, ITag, ITagNormolaized} from './types';
+import {IComment, IErrorResponse, IPost, IPostById, IPostTransform, IPostTransformById, ITag, ITagNormolaized} from './types';
 
 export const enum ETypeForm {
     CREATE = 'create',
@@ -70,49 +71,22 @@ export const postApi = createApi({
             // },
             // providesTags: (result, error, page) => [{type: 'Post', id: `Pat-List-${page}`}],
         }),
-        getPostById: builder.query<IPostTransform, number>({
+        getPostById: builder.query<IPostTransformById, number>({
             query(id) {
                 return {
                     url: `${URL_POST.DEFUALT}/${id}`,
                     credentials: 'include',
                 };
             },
-            transformResponse: async (post: IPost) => {
-                const postTransformed: IPostTransform[] = await transformDataPosts().getTransformDataPosts([post]);
-                return postTransformed[0];
+            transformResponse: async (post: IPostById) => {
+                const postTransformed: IPostTransformById = await transformDataPosts().getTransformDataPostById(post);
+                return postTransformed;
             },
-        }),
-        toggleLike: builder.mutation<{likesCount: number}, number>({
-            query(id) {
-                return {
-                    url: URL_POST.LIKEPOST(id),
-                    method: 'POST',
-                    credentials: 'include',
-                };
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
             },
-            async onQueryStarted(args, {dispatch, queryFulfilled}) {
-                if (args) {
-                    try {
-                        const {data} = await queryFulfilled;
-                        dispatch(postLiked({id: args, likesCount: data.likesCount}));
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-            },
-        }),
-        getTags: builder.query<ITagNormolaized[], string>({
-            query(title) {
-                const withTitle = title ? `?title=${title}` : '';
-                return {
-                    url: `${URL_TAGS}${withTitle}`,
-                    credentials: 'include',
-                };
-            },
-            transformResponse: (tags: ITag[]) => {
-                const tagsNormolaized = normalizationTags(tags);
-                return tagsNormolaized;
-            },
+            providesTags: ['Post'],
         }),
         createPost: builder.mutation<IPost, TCreateInput>({
             query(data) {
@@ -216,6 +190,67 @@ export const postApi = createApi({
                 }
             },
         }),
+        toggleLike: builder.mutation<{likesCount: number}, number>({
+            query(id) {
+                return {
+                    url: URL_POST.LIKEPOST(id),
+                    method: 'POST',
+                    credentials: 'include',
+                };
+            },
+            async onQueryStarted(args, {dispatch, queryFulfilled}) {
+                if (args) {
+                    try {
+                        const {data} = await queryFulfilled;
+                        dispatch(postLiked({id: args, likesCount: data.likesCount}));
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            },
+        }),
+        getTags: builder.query<ITagNormolaized[], string>({
+            query(title) {
+                const withTitle = title ? `?title=${title}` : '';
+                return {
+                    url: `${URL_TAGS}${withTitle}`,
+                    credentials: 'include',
+                };
+            },
+            transformResponse: (tags: ITag[]) => {
+                const tagsNormolaized = normalizationTags(tags);
+                return tagsNormolaized;
+            },
+        }),
+        createComment: builder.mutation<IComment, {data: ICreateComment; postId: number}>({
+            query({postId, data}) {
+                return {
+                    url: URL_POST.COMMENT_CREATE(postId),
+                    method: 'POST',
+                    credentials: 'include',
+                    body: data,
+                };
+            },
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
+            },
+            invalidatesTags: ['Post'],
+        }),
+        deleteComment: builder.mutation<IComment, {postId: number; commentId: number}>({
+            query({postId, commentId}) {
+                return {
+                    url: URL_POST.COMMENT_DELITE(postId, commentId),
+                    method: 'DELETE',
+                    credentials: 'include',
+                };
+            },
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
+            },
+            invalidatesTags: ['Post'],
+        }),
     }),
 });
 
@@ -228,4 +263,6 @@ export const {
     useGetPostByIdQuery,
     useLazyGetPostByIdQuery,
     useEditPostMutation,
+    useCreateCommentMutation,
+    useDeleteCommentMutation,
 } = postApi;

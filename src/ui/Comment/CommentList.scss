@@ -1,0 +1,9 @@
+.CommentList {
+    width: 100%;
+    &__container {
+        width: 100%;
+        & > div:not(:last-child) {
+            margin-bottom: 16px;
+        }
+    }
+}

@@ -9,7 +9,12 @@ import {resetMyPosts, setPinPost} from '../store/features/userSlice';
 
 const INITIAL_CURRENT_PAGE = 1;
 
-export default function useScrollFetchngPost(me: IUser | null, toggleEditPost: (post: IPostTransform) => any, urlAvatar?: string) {
+export default function useScrollFetchngPost(
+    me: IUser | null,
+    toggleEditPost: (post: IPostTransform) => any,
+    handlePostIdShow: (postId: number) => void,
+    urlAvatar?: string,
+) {
     const [currentPage, setCurrentPage] = React.useState<number>(INITIAL_CURRENT_PAGE);
 
     const dataPosts = useAppSelector(getMyPosts());
@@ -20,7 +25,7 @@ export default function useScrollFetchngPost(me: IUser | null, toggleEditPost: (
         {skip: isAll, refetchOnMountOrArgChange: true},
     );
     const [getPostById, data] = useLazyGetPostByIdQuery();
-    const {data: postPin} = data;
+    const {data: postPin, isFetching: isFetchingPostById} = data;
     const [withPin, setWithPin] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
@@ -39,7 +44,7 @@ export default function useScrollFetchngPost(me: IUser | null, toggleEditPost: (
     }, [currentPage, isFetchingPostList, lodaing]);
 
     React.useEffect(() => {
-        if (me && me.pinnedPostId > 0) {
+        if (me && me.pinnedPostId > 0 && !userPosts) {
             getPostById(me.pinnedPostId, true);
         }
     }, []);
@@ -72,10 +77,13 @@ export default function useScrollFetchngPost(me: IUser | null, toggleEditPost: (
                     urlAvatar={urlAvatar}
                     posts={userPosts}
                     onEditPost={toggleEditPost}
+                    onPostIdShow={handlePostIdShow}
                     withInformationBlock
                 />
             )}
-            {lodaing.postion === EPositionLoading.DOWN && (isFetchingPostList || lodaing.isLoading) && <PostSkeleton marginTop="16px" />}
+            {lodaing.postion === EPositionLoading.DOWN && (isFetchingPostById || isFetchingPostList || lodaing.isLoading) && (
+                <PostSkeleton marginTop="16px" />
+            )}
         </>
     );
     return {getPosts, userPosts};

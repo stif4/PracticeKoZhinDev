@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {EPositionLoading, IPost, IPostTransform, IUser} from '../api/types';
+import {EPositionLoading, IPost, IPostTransform, IPostTransformById, IUser} from '../api/types';
 
 interface IURLAvatar {
     urlAvatar: string | undefined;
@@ -100,7 +100,7 @@ export const userSlice = createSlice({
             state.userPosts.userPosts = null;
             state.userPosts.isAll = false;
         },
-        setPinPost: (state, action: PayloadAction<IPostTransform>) => {
+        setPinPost: (state, action: PayloadAction<IPostTransformById>) => {
             if (state.userPosts.userPosts) {
                 state.userPosts.userPosts = [action.payload, ...state.userPosts.userPosts];
             } else {

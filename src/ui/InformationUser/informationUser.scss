@@ -27,8 +27,8 @@
         font-size: var(--text-medium-size);
         line-height: 18px;
         color: var(--text-gray-darck-color);
-
-        word-wrap: break-word;
+        overflow-wrap: anywhere;
+        //word-wrap: break-word;
     }
     &__bottom {
         margin-top: 16px;

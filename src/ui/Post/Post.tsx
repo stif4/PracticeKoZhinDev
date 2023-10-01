@@ -1,86 +1,49 @@
 import React from 'react';
-import {toast} from 'react-toastify';
-import Avatar from '../Avatar';
+import {useNavigate} from 'react-router-dom';
 import Card from '../Card';
 import Like from '../Like';
-import PopUp from '../Pop-up';
 import TagList from '../Tag';
 import {IPostTransform} from '../../store/api/types';
-import {IInformationBlock, IItem} from '../types/types';
+import {IInformationBlock} from '../types/types';
 import {useAppSelector} from '../../store/store';
-import {getIsEditPost, getMe} from '../../store/features/userSuncks';
-import {useDeletePostMutation, useEditPostMutation} from '../../store/api/postApi';
-import './Post.scss';
-import {usePinPostMutation, useUnpinPostMutation} from '../../store/api/userApi';
+import {getIsEditPost} from '../../store/features/userSuncks';
 import PostSkeleton from './PostSkeleton';
+import PostHeader from './PostHeader';
+import './Post.scss';
 
 interface IPostProps {
     urlAvatar?: string;
     informationBlock?: IInformationBlock;
     postTransformed: IPostTransform;
     onEditPost?: (post: IPostTransform) => void;
+    onPostIdShow?: (post: number) => void;
+    withoutCard?: boolean;
+    imgPostSqueeze?: boolean;
+    prefixClass?: string;
+    isPostPage?: boolean;
 }
 
-export default function Post({urlAvatar, informationBlock, postTransformed, onEditPost}: IPostProps) {
-    const [deletePost, {isError: isErrorDelete, isSuccess: isSuccessDelete}] = useDeletePostMutation();
-    const [pinPost, {isError: isErrorPinPost, isSuccess: isSuccessPinPost}] = usePinPostMutation();
-    const [unpinPost, {isError: isErrorUnPinPost, isSuccess: isSuccessUnPinPost}] = useUnpinPostMutation();
+const CLASS_POST_IMG = 'Post__img';
+const CLASS_POST_IMG_SQUEEZE = 'Post__img Post__img_squeeze';
 
-    const me = useAppSelector(getMe());
+export default function Post({isPostPage, postTransformed, imgPostSqueeze, withoutCard, onPostIdShow, prefixClass = '', ...other}: IPostProps) {
     const {isLoading: isLoadingEditPost, id: idEditPost} = useAppSelector(getIsEditPost());
-    const isMyPost = Boolean(me && postTransformed.creatorId === me.id);
-    const isPinPost = Boolean(me && postTransformed.id === me.pinnedPostId);
-
-    const handleDelete = () => {
-        if (isMyPost) {
-            deletePost(postTransformed.id);
-        }
-    };
-
-    const handleUnPinPost = () => {
-        unpinPost(null);
-    };
-
-    const handlePinPost = () => {
-        pinPost(postTransformed.id);
-    };
-
-    React.useEffect(() => {
-        if (isErrorDelete || isErrorPinPost || isErrorUnPinPost) {
-            toast('Что то пошло ни так', {type: 'error'});
-        }
-    }, [isErrorDelete || isErrorPinPost || isErrorUnPinPost]);
-
-    React.useEffect(() => {
-        if (isSuccessDelete || isSuccessUnPinPost || isSuccessPinPost) {
-            const word = isSuccessDelete ? 'удален' : isSuccessUnPinPost ? 'откреплен' : isSuccessPinPost ? 'закреплен' : '';
-            toast(`Пост успешно ${word}`, {type: 'success'});
-        }
-    }, [isSuccessDelete || isSuccessUnPinPost || isSuccessPinPost]);
-
-    const handleEdit = () => {
-        if (onEditPost) {
-            onEditPost(postTransformed);
-        }
-    };
-
-    const getItemsPopUp = () => {
-        const items: IItem[] = [
-            {text: isPinPost ? 'Открепить пост' : 'Закрепить пост', addClass: '', action: isPinPost ? handleUnPinPost : handlePinPost},
-        ];
-        if (isMyPost) {
-            items.push({text: 'Редактировать пост', addClass: '', action: handleEdit});
-            items.push({text: 'Удалить пост', addClass: 'red', action: handleDelete});
-        }
-        return items;
-    };
+    const navigate = useNavigate();
 
     const getPaddingCard = () => {
-        if (!informationBlock) {
+        if (!other.informationBlock) {
             return '0px 16px 16px 16px';
         }
         return undefined;
     };
+
+    const handleClick = () => {
+        if (!isPostPage && onPostIdShow) {
+            onPostIdShow(postTransformed.id);
+            //navigate(`/news/${postTransformed.id}`);
+        }
+    };
+    const onKeyPressHandler = () => {};
 
     if (isLoadingEditPost) {
         if (idEditPost === postTransformed.id) {
@@ -88,47 +51,42 @@ export default function Post({urlAvatar, informationBlock, postTransformed, onEd
         }
     }
 
+    const classNamePostImg = imgPostSqueeze ? CLASS_POST_IMG_SQUEEZE : CLASS_POST_IMG;
+
     return (
         <div className="Post">
-            <Card padding={getPaddingCard()}>
+            <Card
+                padding={getPaddingCard()}
+                isHide={withoutCard}
+            >
                 <div className="Post__container">
-                    {informationBlock && (
-                        <div className="Post__header">
-                            <Avatar
-                                informationBlock={informationBlock}
-                                urlImg={urlAvatar}
-                                withInformationBlock
-                                size={50}
-                            />
-                            <div className="Post__menu">
-                                {isPinPost && (
-                                    <figure className="Post__attacher">
-                                        <img
-                                            className="Post__imgAttacher"
-                                            src="./icons/pin.svg"
-                                            alt="attach"
-                                        />
-                                    </figure>
-                                )}
-                                <div className="Post__popUp">
-                                    <PopUp items={getItemsPopUp()} />
-                                </div>
+                    {other.informationBlock && (
+                        <PostHeader
+                            postTransformed={postTransformed}
+                            {...other}
+                        />
+                    )}
+
+                    <div
+                        className={`Post__clickArea ${prefixClass}Post__clickArea`}
+                        onClick={handleClick}
+                        onKeyPress={onKeyPressHandler}
+                        role="button"
+                        tabIndex={0}
+                    >
+                        {postTransformed.imageUrl && (
+                            <div className={`Post__containerImg ${prefixClass}Post__containerImg`}>
+                                <img
+                                    className={classNamePostImg}
+                                    src={postTransformed.imageUrl}
+                                    alt="postImg"
+                                />
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {postTransformed.imageUrl && (
-                        <div className="Post__containerImg">
-                            <img
-                                className="Post__img"
-                                src={postTransformed.imageUrl}
-                                alt="postImg"
-                            />
-                        </div>
-                    )}
-
-                    <h2 className="Post__title">{postTransformed.title}</h2>
-                    <p className="Post__text">{postTransformed.text}</p>
+                        <h2 className={`Post__title ${prefixClass}Post__title`}>{postTransformed.title}</h2>
+                        <p className="Post__text">{postTransformed.text}</p>
+                    </div>
 
                     <div className="Post__tegs">
                         <TagList tags={postTransformed.tags} />

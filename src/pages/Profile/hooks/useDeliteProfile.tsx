@@ -4,7 +4,7 @@ import {useDeleteUserMutation} from '../../../store/api/userApi';
 import ProfileModal from '../modal/ProfileModal';
 
 export default function useDeliteProfile() {
-    const [isActiveModalDelite, setActiveModalDelite] = React.useState<boolean>(false);
+    const [isActive, setActive] = React.useState<boolean>(false);
 
     const [deleteUser] = useDeleteUserMutation();
 
@@ -20,13 +20,13 @@ export default function useDeliteProfile() {
 
     const toggleModalDelite = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
-        setActiveModalDelite((prev) => !prev);
+        setActive((prev) => !prev);
     };
 
     const getProfileDeliteModal = () => (
         <ProfileModal
             onActive={toggleModalDelite}
-            isActive={isActiveModalDelite}
+            isActive={isActive}
             onDelite={handelDelete}
         />
     );

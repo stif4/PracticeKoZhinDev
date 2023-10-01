@@ -3,11 +3,11 @@ import {IPostTransform} from '../../../store/api/types';
 import ProfilePaperSlideEditPost from '../modal/ProfilePaperSlideEditPost';
 
 export default function useEditPost() {
-    const [isActivePaperSlideEditPost, setIsActivePaperSlideEditPost] = React.useState<boolean>(false);
+    const [isActive, setIsActive] = React.useState<boolean>(false);
     const [postEdit, setPostEdit] = React.useState<IPostTransform>();
 
     const toggleEditPost = () => {
-        setIsActivePaperSlideEditPost((prev) => !prev);
+        setIsActive((prev) => !prev);
     };
 
     const handleEditPost = (post: IPostTransform) => {
@@ -17,7 +17,7 @@ export default function useEditPost() {
 
     const getEditPostModal = () => (
         <ProfilePaperSlideEditPost
-            isActive={isActivePaperSlideEditPost}
+            isActive={isActive}
             toggleEditPost={toggleEditPost}
             post={postEdit}
         />

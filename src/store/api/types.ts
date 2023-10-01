@@ -39,7 +39,7 @@ export interface IResponceLogin {
 
 export interface IErrorResponse {
     message: string;
-    status: string;
+    statusCode: number;
     error: string;
 }
 
@@ -89,6 +89,10 @@ export interface IPost {
     updateTime: Date;
 }
 
+export interface IPostById extends IPost {
+    comments: IComment[];
+}
+
 export interface IPostTransform {
     id: number;
     title: string;
@@ -101,6 +105,34 @@ export interface IPostTransform {
     imageUrl: string | undefined;
     createTime: string;
     updateTime: string;
+}
+
+export interface IPostTransformById extends IPostTransform {
+    comments: IComment[];
+}
+
+//----// Comment //----//
+
+interface ICommentUser {
+    id: number;
+    firstName: string;
+    lastName: string;
+    nickname: string;
+    updateTime: Date;
+    createTime: Date;
+    avatarId: number;
+    pinnedPostId: number;
+    description: string;
+}
+
+export interface IComment {
+    id: number;
+    text: string;
+    userId: number;
+    postId: number;
+    createTime: Date;
+    updateTime: Date;
+    user?: ICommentUser[];
 }
 
 ///// enums /////

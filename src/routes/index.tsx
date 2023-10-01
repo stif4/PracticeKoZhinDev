@@ -2,6 +2,8 @@ import React from 'react';
 import {createBrowserRouter} from 'react-router-dom';
 import {ROUTE_AUTH, ROUTE_HOME, ROUTE_NEWS, ROUTE_REGISTER, ROUTE_SUBSCRIPTIONS, ROUTE_USER} from '../constants/routes';
 import AuthPage from '../pages/AuthPage/AuthPage';
+import ErrorPage from '../pages/ErrorPage';
+import PostPage from '../pages/PostPage';
 import Profile from '../pages/Profile';
 import Layout from '../shared/Layout';
 import PrivateRoute from './PrivateRoute';
@@ -10,6 +12,7 @@ const router = createBrowserRouter([
     {
         path: ROUTE_HOME,
         element: <Layout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: ROUTE_NEWS,
@@ -20,7 +23,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ':id',
-                        element: <div>Определенный пост!</div>,
+                        element: <PostPage />,
                     },
                 ],
             },

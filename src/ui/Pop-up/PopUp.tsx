@@ -1,4 +1,5 @@
 import React from 'react';
+import ClickAwayListener from 'react-click-away-listener';
 import {IItem} from '../types/types';
 import './PopUp.scss';
 
@@ -31,40 +32,42 @@ export default function PopUp({items}: IPopUpProps) {
 
     return (
         <div className="PopUp">
-            <div className="PopUp__container">
-                <div
-                    className="PopUp__img"
-                    onClick={handleClick}
-                    onKeyPress={onKeyPressHandler}
-                    role="button"
-                    tabIndex={0}
-                >
-                    <img
-                        className="PopUp__icon"
-                        src="/icons/threedots.svg"
-                        alt="menuThreeDots"
-                    />
+            <ClickAwayListener onClickAway={() => setIsShow(false)}>
+                <div className="PopUp__container">
+                    <div
+                        className="PopUp__img"
+                        onClick={handleClick}
+                        onKeyPress={onKeyPressHandler}
+                        role="button"
+                        tabIndex={0}
+                    >
+                        <img
+                            className="PopUp__icon"
+                            src="/icons/threedots.svg"
+                            alt="menuThreeDots"
+                        />
+                    </div>
+                    <div className={classMenu}>
+                        <ul className="PopUp__items">
+                            {items.map((item) => {
+                                const classItem = item.addClass === 'red' ? ITEM_CLASS_RED : '';
+                                return (
+                                    <div
+                                        key={item.text}
+                                        className={`PopUp__item ${classItem}`}
+                                        onClick={(e) => handleClickItem(item, e)}
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyPress={onKeyPressHandler}
+                                    >
+                                        {item.text}
+                                    </div>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </div>
-                <div className={classMenu}>
-                    <ul className="PopUp__items">
-                        {items.map((item) => {
-                            const classItem = item.addClass === 'red' ? ITEM_CLASS_RED : '';
-                            return (
-                                <div
-                                    key={item.text}
-                                    className={`PopUp__item ${classItem}`}
-                                    onClick={(e) => handleClickItem(item, e)}
-                                    role="button"
-                                    tabIndex={0}
-                                    onKeyPress={onKeyPressHandler}
-                                >
-                                    {item.text}
-                                </div>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
+            </ClickAwayListener>
         </div>
     );
 }

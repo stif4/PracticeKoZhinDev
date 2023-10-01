@@ -3,15 +3,15 @@ import {toast} from 'react-toastify';
 import ProfilePaperSlideEdit from '../modal/ProfilePaperSlideEdit';
 
 export default function useEditProfile() {
-    const [isActivePaperSlideEdit, setIsActivePaperSlideEdit] = React.useState<boolean>(false);
+    const [isActive, setIsActive] = React.useState<boolean>(false);
 
     const toggleEditProffile = () => {
-        setIsActivePaperSlideEdit((prev) => !prev);
+        setIsActive((prev) => !prev);
     };
 
     const getProfileEditModal = () => (
         <ProfilePaperSlideEdit
-            isActive={isActivePaperSlideEdit}
+            isActive={isActive}
             toggleEditProffile={toggleEditProffile}
         />
     );

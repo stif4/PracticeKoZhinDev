@@ -1,7 +1,6 @@
 .PopUp {
     &__container {
         position: relative;
-        z-index: var(--pop-up-z-index);
     }
 
     &__img {
@@ -33,6 +32,7 @@
             transition: all 0.4s ease-in-out;
             visibility: visible;
         }
+        z-index: var(--pop-up-z-index);
     }
 
     &__menu:before {
