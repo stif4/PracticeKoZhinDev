@@ -15,6 +15,7 @@ export const URL_USER = {
     PIN_POST: PATH_USER + '/pin-post',
     UNPIN_POST: PATH_USER + '/unpin-post',
     AVATAR: PATH_USER + '/avatar',
+    SUBSCRIBE: (userId: number) => PATH_USER + `/${userId}/subscribe`,
 };
 
 export const URL_FILE = '/file';

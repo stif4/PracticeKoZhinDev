@@ -1,7 +1,7 @@
 import coockiesService from '../../service/coockies.service';
 import fetchService from '../../service/fetch.service';
 import transformDataPosts from '../../service/transformDataPosts.service';
-import {IPost, IUser} from '../api/types';
+import {IPost, IUserById} from '../api/types';
 import {userApi} from '../api/userApi';
 import {AppDispatch, RootState} from '../store';
 import {failedAvatar, failedPosts, fulfilledAvatar, fulfilledPosts, logout, pendingAvatar, pendingPosts} from './userSlice';
@@ -21,7 +21,7 @@ export const logOut = () => async (dispatch: AppDispatch) => {
 export const setPosts = (posts: IPost[], isCreated?: boolean) => async (dispatch: AppDispatch, getState: () => RootState) => {
     let post: IPost[] = [];
     if (isCreated) {
-        const user = getState().userState.user as IUser;
+        const user = getState().userState.user as IUserById;
         post = [
             {
                 ...posts[0],

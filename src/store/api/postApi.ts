@@ -29,7 +29,24 @@ export const postApi = createApi({
     }),
     tagTypes: ['Post'],
     endpoints: (builder) => ({
-        getMyPosts: builder.query<IPost[], {page: number; postPinId: number | undefined}>({
+        getPosts: builder.query<IPostTransform[], {page: number; userId?: number}>({
+            query({page, userId}) {
+                const withUser = userId || '';
+                return {
+                    url: `${URL_POST.DEFUALT}?page=${page}&pageSize=5&userId=${withUser}`,
+                    credentials: 'include',
+                };
+            },
+            transformResponse: async (posts: IPost[]) => {
+                const postsTransformed: IPostTransform[] = await transformDataPosts().getTransformDataPosts(posts);
+                return postsTransformed;
+            },
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
+            },
+        }),
+        getMyPosts: builder.query<IPost[], {page: number; postPinId: number | undefined | null}>({
             query({page}) {
                 return {
                     url: `${URL_POST.MY_POSTS}?page=${page}&pageSize=5`,
@@ -255,6 +272,7 @@ export const postApi = createApi({
 });
 
 export const {
+    useGetPostsQuery,
     useGetMyPostsQuery,
     useToggleLikeMutation,
     useLazyGetTagsQuery,

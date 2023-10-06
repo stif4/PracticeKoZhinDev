@@ -35,7 +35,7 @@ export default function Profile() {
     const {getPostByIdModal, handlePostIdShow} = useShowPostById();
 
     /* Get PostList with LazyScroll*/
-    const {getPosts, userPosts: posts} = useScrollFetchngPost(me, handleEditPost, handlePostIdShow, urlAvatar);
+    const {getPosts, userPosts: posts} = useScrollFetchngPost(me, handleEditPost, handlePostIdShow);
 
     /* ---------------- */
     const handleLogOut = () => {
@@ -47,7 +47,7 @@ export default function Profile() {
         }
     };
 
-    const ITEMS: IItem[] = [
+    const itemsMenu: IItem[] = [
         {text: 'Редактировать профиль', addClass: '', action: toggleEditProffile},
         {text: 'Выйти из профиля', addClass: '', action: handleLogOut},
         {text: 'Удалить профиль', addClass: 'red', action: toggleModalDelite},
@@ -72,7 +72,7 @@ export default function Profile() {
                             <InformationUser
                                 urlAvatar={urlAvatar}
                                 informationBlock={getInformationBlock() as IInformationBlock}
-                                items={ITEMS}
+                                items={itemsMenu}
                                 discription={me.description}
                                 isLoadingAvatar={isLoadingAvatar}
                             >

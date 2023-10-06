@@ -1,5 +1,5 @@
-import {IUser} from '../store/api/types';
+import {IUserById, IUser} from '../store/api/types';
 
-export default function checkSubscriptions(me: IUser, user: IUser): boolean {
+export default function checkSubscriptions(me: IUserById, user: IUserById | IUser): boolean {
     return me.subscriptions.some((sub) => sub.id === user.id);
 }

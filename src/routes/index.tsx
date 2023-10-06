@@ -5,6 +5,8 @@ import AuthPage from '../pages/AuthPage/AuthPage';
 import ErrorPage from '../pages/ErrorPage';
 import PostPage from '../pages/PostPage';
 import Profile from '../pages/Profile';
+import SubscriptionsPage from '../pages/Subscriptions';
+import UserPage from '../pages/UserPage/UserPage';
 import Layout from '../shared/Layout';
 import PrivateRoute from './PrivateRoute';
 
@@ -50,11 +52,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ':id',
-                        element: <div>some user!</div>,
+                        element: <UserPage />,
                     },
                     {
                         path: ROUTE_SUBSCRIPTIONS,
-                        element: <div>subscriptions!</div>,
+                        element: <SubscriptionsPage />,
                     },
                 ],
             },

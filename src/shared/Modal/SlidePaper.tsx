@@ -4,12 +4,13 @@ import './SlidePaper.scss';
 interface ISlidePaperProps {
     children: React.ReactNode;
     isActive: boolean;
+    height?: string;
 }
 
 const SLIDE_PAPER_DEFULT = 'SlidePaper';
 const SLIDE_PAPER_ACTIVE = 'SlidePaper SlidePaper_active';
 
-export default function SlidePaper({children, isActive}: ISlidePaperProps) {
+export default function SlidePaper({children, isActive, height}: ISlidePaperProps) {
     const className = isActive ? SLIDE_PAPER_ACTIVE : SLIDE_PAPER_DEFULT;
 
     React.useEffect(() => {
@@ -26,7 +27,12 @@ export default function SlidePaper({children, isActive}: ISlidePaperProps) {
 
     return (
         <div className={className}>
-            <div className="SlidePaper__container">{children}</div>
+            <div
+                className="SlidePaper__container"
+                style={{height}}
+            >
+                {children}
+            </div>
         </div>
     );
 }

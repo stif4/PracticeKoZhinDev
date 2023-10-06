@@ -6,21 +6,24 @@ import {useGetUserQuery} from '../store/api/userApi';
 import {getMe, getUrlAvatar} from '../store/features/userSuncks';
 import {useAppSelector} from '../store/store';
 
-export default function useFetchUserWithAwatar(userId: number) {
-    const me = useAppSelector(getMe()) as IUser;
+export default function useFetchUserWithAwatar(userId: number, userFully?: IUser) {
+    const me = useAppSelector(getMe());
 
     const meAvatar = useAppSelector(getUrlAvatar());
-    const isMe = me.id === userId;
+    const isMe = me ? me.id === userId : false;
+    const isUserFully = Boolean(userFully);
+    const skipToken = isUserFully || isMe;
 
     const {
         data: user,
         isLoading: isLoadingUser,
         isFetching: isFetchingUser,
         isError: isErrorUser,
+        error: errorUser,
         isSuccess: isSuccessUser,
-    } = useGetUserQuery({id: userId}, {skip: isMe});
+    } = useGetUserQuery({id: userId}, {skip: skipToken});
 
-    const [avatar, setAvatar] = React.useState<string | undefined>(isMe ? meAvatar.urlAvatar : undefined);
+    const [avatar, setAvatar] = React.useState<string | undefined>(undefined);
     const [isLoadingAvatar, setIsLoadingAvatar] = React.useState<boolean>(false);
 
     const fetchAvatarCreator = async (id: number) => {
@@ -37,10 +40,36 @@ export default function useFetchUserWithAwatar(userId: number) {
     }, [user]);
 
     React.useEffect(() => {
+        if (!isMe && userFully && userFully.avatarId) {
+            setIsLoadingAvatar(true);
+            fetchAvatarCreator(userFully?.avatarId);
+        }
+    }, []);
+
+    React.useEffect(() => {
         if (isErrorUser) {
             toast('Что то не так', {type: 'error'});
         }
     }, [isErrorUser]);
 
-    return {isLoadingAvatar, avatar, user: isMe ? me : user, isFetchingUser, isMe, me};
+    const getUser = () => {
+        if (isMe) {
+            return me;
+        }
+        if (userFully) {
+            return userFully;
+        }
+        return user;
+    };
+
+    return {
+        isLoadingAvatar: isMe ? meAvatar.loading : isLoadingAvatar,
+        avatar: isMe ? meAvatar.urlAvatar : avatar,
+        isErrorUser,
+        errorUser,
+        user: getUser(),
+        isFetchingUser,
+        isMe,
+        me,
+    };
 }

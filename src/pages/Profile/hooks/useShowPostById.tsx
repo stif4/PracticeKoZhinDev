@@ -1,5 +1,5 @@
 import React from 'react';
-import PaperSlidePostByIdShow from '../modal/PaperSlidePostByIdShow';
+import PaperSlidePostByIdShow from '../../../shared/Modal/PaperSlidePostById/PaperSlidePostByIdShow';
 
 export default function useShowPostById() {
     const [postId, setPostId] = React.useState<number | null>(null);

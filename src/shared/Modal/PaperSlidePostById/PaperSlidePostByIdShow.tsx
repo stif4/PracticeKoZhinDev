@@ -1,8 +1,7 @@
 import React from 'react';
-import CreatePostForm from '../../../shared/Forms/CreatePostForm';
-import SlidePaper from '../../../shared/Modal/SlidePaper';
+import SlidePaper from '../SlidePaper';
 import BackButton from '../../../ui/Button/BackButton/BackButton';
-import PostPage from '../../PostPage';
+import PostPage from '../../../pages/PostPage';
 import './PaperSlidePostByIdShow.scss';
 
 interface IPaperSlidePostByIdShowProps {
@@ -19,7 +18,6 @@ export default function PaperSlidePostByIdShow({isActive, togglePostByIdShow, po
                     <div className="PaperSlidePostByIdShow__button">
                         <BackButton onClick={togglePostByIdShow} />
                     </div>
-
                     {postId && <PostPage postIdFromModal={postId} />}
                 </div>
             </div>

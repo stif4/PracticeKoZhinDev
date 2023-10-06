@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {EPositionLoading, IPost, IPostTransform, IPostTransformById, IUser} from '../api/types';
+import {EPositionLoading, IPost, IPostTransform, IPostTransformById, IUserById} from '../api/types';
 
 interface IURLAvatar {
     urlAvatar: string | undefined;
@@ -21,7 +21,7 @@ interface IIsEditPost {
     isLoading: boolean;
 }
 interface IUserState {
-    user: IUser | null;
+    user: IUserById | null;
     avatar: IURLAvatar;
     userPosts: IUserPosts;
     isEditPost: IIsEditPost;
@@ -39,7 +39,7 @@ export const userSlice = createSlice({
     name: 'userSlice',
     reducers: {
         logout: () => initialState,
-        setUser: (state, action: PayloadAction<IUser>) => {
+        setUser: (state, action: PayloadAction<IUserById>) => {
             // const newUser = {...action.payload, subscriptions: [...action.payload.subscriptions]};
             state.user = action.payload;
         },

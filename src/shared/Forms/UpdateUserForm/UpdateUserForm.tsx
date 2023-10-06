@@ -20,7 +20,7 @@ interface IUserUpdate {
     firstName: string;
     lastName: string;
     nickname: string;
-    description: string;
+    description: string | null;
 }
 
 export interface IUserUpdateSent {
@@ -78,7 +78,9 @@ export default function UpdateUserForm({closeForm}: IUpdateUserFormProps) {
                 const valueUpdate = dataUpdate[property as keyof IUserUpdate];
                 const valueCurrent = me[property as keyof IUserUpdate];
                 if (valueUpdate !== valueCurrent) {
-                    dataSent[property as keyof IUserUpdate] = valueUpdate;
+                    if (valueUpdate) {
+                        dataSent[property as keyof IUserUpdate] = valueUpdate;
+                    }
                 }
             }
         }
@@ -233,7 +235,7 @@ export default function UpdateUserForm({closeForm}: IUpdateUserFormProps) {
                 <div className="UpdateUserForm__textArea">
                     <TextArea
                         onChange={handleChange}
-                        value={dataUpdate.description}
+                        value={dataUpdate?.description ? dataUpdate?.description : ''}
                         name="description"
                         id="description-UpdateUserForm-id"
                         placeholder="Расскажи о себе"

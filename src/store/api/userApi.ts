@@ -1,10 +1,11 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {createApi, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react';
 import {URL_BASE, URL_USER} from '../../constants/api';
 import coockiesService from '../../service/coockies.service';
 import {IUserUpdateSent} from '../../shared/Forms/UpdateUserForm/UpdateUserForm';
+import getQuerySeartchTransformed, {IVariantQuerySeartchUser} from '../../utils/querySeartchTransformed';
 import {setUser} from '../features/userSlice';
 import {logOut} from '../features/userSuncks';
-import {IErrorResponse, IUser} from './types';
+import {IErrorResponse, IUser, IUserById} from './types';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
@@ -20,12 +21,16 @@ export const userApi = createApi({
     }),
     tagTypes: ['User'],
     endpoints: (builder) => ({
-        getUser: builder.query<IUser, {id: number | null; isMe?: boolean}>({
+        getUser: builder.query<IUserById, {id: number | null; isMe?: boolean}>({
             query({id}) {
                 return {
                     url: `${URL_USER.DEFUALT}/${id}`,
                     credentials: 'include',
                 };
+            },
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
             },
             async onQueryStarted(args, {dispatch, queryFulfilled}) {
                 try {
@@ -39,7 +44,7 @@ export const userApi = createApi({
             },
             providesTags: ['User'],
         }),
-        setAvatar: builder.mutation<IUser, FormData>({
+        setAvatar: builder.mutation<IUserById, FormData>({
             query(data) {
                 return {
                     url: `${URL_USER.AVATAR}`,
@@ -58,7 +63,7 @@ export const userApi = createApi({
             },
             invalidatesTags: ['User'],
         }),
-        updateUser: builder.mutation<IUser, IUserUpdateSent>({
+        updateUser: builder.mutation<IUserById, IUserUpdateSent>({
             query(data) {
                 const dataSent = {...data};
                 delete dataSent.avatar;
@@ -103,7 +108,124 @@ export const userApi = createApi({
                 }
             },
         }),
-        pinPost: builder.mutation<IUser, number>({
+        getUsers: builder.query<IUser[], {page: number; querySeartch: string}>({
+            async queryFn({page, querySeartch}, _queryApi, _extraOptions, fetchWithBQ) {
+                const baseQueryForRequest = `page=${page}&pageSize=10`;
+
+                const getQuery = ({lastName, firstName, nickname}: IVariantQuerySeartchUser) => {
+                    if (lastName || firstName) {
+                        if (lastName && firstName) {
+                            return `${baseQueryForRequest}&firstName=${firstName}&lastName=${lastName}`;
+                        }
+                        if (lastName) {
+                            return `${baseQueryForRequest}&lastName=${lastName}`;
+                        }
+                        if (firstName) {
+                            return `${baseQueryForRequest}&firstName=${firstName}`;
+                        }
+                    }
+                    if (nickname) {
+                        return `${baseQueryForRequest}&nickname=${nickname}`;
+                    }
+                    return `${baseQueryForRequest}`;
+                };
+
+                const fetchData = async (query: string) => {
+                    try {
+                        const userRes = await fetchWithBQ(`${URL_USER.DEFUALT}?${query}`);
+                        return {data: userRes.data as IUser[], error: null};
+                    } catch (error) {
+                        const err = error as FetchBaseQueryError;
+                        return {data: undefined, error: err};
+                    }
+                };
+
+                const getUsers = async (variantsQuery: '' | IVariantQuerySeartchUser[]) => {
+                    if (!variantsQuery) {
+                        const usersRes = await fetchData(baseQueryForRequest);
+                        return usersRes;
+                    }
+
+                    const usersSlicesRes = await Promise.all(
+                        variantsQuery.map(async (variant) => {
+                            const usersSliceRes = await fetchData(getQuery(variant));
+                            return usersSliceRes;
+                        }),
+                    );
+
+                    const withError = usersSlicesRes.find((userRes) => userRes.error !== null);
+                    if (withError) {
+                        return {data: undefined, error: withError.error};
+                    }
+
+                    const usersListRes = usersSlicesRes.map((user) => user.data).flat(1) as IUser[];
+                    return {data: usersListRes, error: null};
+                };
+
+                const variantsQuery = getQuerySeartchTransformed(querySeartch);
+                const userRes = await getUsers(variantsQuery);
+
+                if (userRes.error) {
+                    return {error: userRes.error};
+                }
+
+                return {data: userRes.data as IUser[]};
+            },
+
+            async onQueryStarted(args, {dispatch, queryFulfilled}) {
+                try {
+                    const {data} = await queryFulfilled;
+                    console.log(data);
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+
+            providesTags: ['User'],
+        }),
+        subscribe: builder.mutation<IUserById, number>({
+            query(id) {
+                return {
+                    url: URL_USER.SUBSCRIBE(id),
+                    method: 'POST',
+                    credentials: 'include',
+                };
+            },
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
+            },
+            async onQueryStarted(args, {dispatch, queryFulfilled}) {
+                try {
+                    const {data} = await queryFulfilled;
+                    dispatch(setUser(data));
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+        }),
+        deliteSubscribe: builder.mutation<IUserById, number>({
+            query(id) {
+                return {
+                    url: URL_USER.SUBSCRIBE(id),
+                    method: 'DELETE',
+                    credentials: 'include',
+                };
+            },
+            transformErrorResponse: (response) => {
+                const data = response.data as IErrorResponse;
+                return data;
+            },
+            async onQueryStarted(args, {dispatch, queryFulfilled}) {
+                try {
+                    const {data} = await queryFulfilled;
+                    dispatch(setUser(data));
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+        }),
+        pinPost: builder.mutation<IUserById, number>({
             query(id) {
                 return {
                     url: `${URL_USER.PIN_POST}/${id}`,
@@ -120,7 +242,7 @@ export const userApi = createApi({
                 }
             },
         }),
-        unpinPost: builder.mutation<IUser, null>({
+        unpinPost: builder.mutation<IUserById, null>({
             query() {
                 return {
                     url: `${URL_USER.UNPIN_POST}`,
@@ -139,4 +261,13 @@ export const userApi = createApi({
         }),
     }),
 });
-export const {useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation, usePinPostMutation, useUnpinPostMutation} = userApi;
+export const {
+    useGetUserQuery,
+    useUpdateUserMutation,
+    useDeleteUserMutation,
+    usePinPostMutation,
+    useUnpinPostMutation,
+    useLazyGetUsersQuery,
+    useDeliteSubscribeMutation,
+    useSubscribeMutation,
+} = userApi;

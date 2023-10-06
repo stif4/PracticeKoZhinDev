@@ -9,7 +9,7 @@ import '../../pages/Profile/Profile.scss';
 
 interface IInformationUserProps {
     informationBlock: IInformationBlock;
-    items: IItem[];
+    items?: IItem[];
     urlAvatar: string | undefined;
     discription: string | null;
     children: React.ReactNode;
@@ -32,9 +32,7 @@ export default function InformationUser({informationBlock, items, children, urlA
                                 size={50}
                             />
                         </div>
-                        <div className="informationUser__menu">
-                            <PopUp items={items} />
-                        </div>
+                        <div className="informationUser__menu">{items && <PopUp items={items} />}</div>
                     </div>
                     <div className="informationUser__description">
                         <p className="informationUser__textDescroption">{discription}</p>

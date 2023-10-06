@@ -19,11 +19,13 @@ function AppLoader({children}: IAppLoader) {
         if (coockiesService().getRefreshtoken()) {
             refresh(true);
         }
-        setCurrentUrlAvatarId(me?.avatarId);
+        if (me && me.avatarId) {
+            setCurrentUrlAvatarId(me.avatarId);
+        }
     }, []);
 
     React.useEffect(() => {
-        if (me) {
+        if (me && me.avatarId) {
             const isEmptyStateUrlAvatar = Boolean(me.avatarId && !urlAvatar);
             const isChangedAvatarId = Boolean(me.avatarId && me.avatarId !== currentUrlAvatarId);
 

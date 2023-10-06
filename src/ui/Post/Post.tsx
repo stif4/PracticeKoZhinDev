@@ -1,5 +1,4 @@
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
 import Card from '../Card';
 import Like from '../Like';
 import TagList from '../Tag';
@@ -12,7 +11,6 @@ import PostHeader from './PostHeader';
 import './Post.scss';
 
 interface IPostProps {
-    urlAvatar?: string;
     informationBlock?: IInformationBlock;
     postTransformed: IPostTransform;
     onEditPost?: (post: IPostTransform) => void;
@@ -28,7 +26,6 @@ const CLASS_POST_IMG_SQUEEZE = 'Post__img Post__img_squeeze';
 
 export default function Post({isPostPage, postTransformed, imgPostSqueeze, withoutCard, onPostIdShow, prefixClass = '', ...other}: IPostProps) {
     const {isLoading: isLoadingEditPost, id: idEditPost} = useAppSelector(getIsEditPost());
-    const navigate = useNavigate();
 
     const getPaddingCard = () => {
         if (!other.informationBlock) {
@@ -40,7 +37,6 @@ export default function Post({isPostPage, postTransformed, imgPostSqueeze, witho
     const handleClick = () => {
         if (!isPostPage && onPostIdShow) {
             onPostIdShow(postTransformed.id);
-            //navigate(`/news/${postTransformed.id}`);
         }
     };
     const onKeyPressHandler = () => {};

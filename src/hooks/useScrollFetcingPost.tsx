@@ -13,7 +13,6 @@ export default function useScrollFetchngPost(
     me: IUser | null,
     toggleEditPost: (post: IPostTransform) => any,
     handlePostIdShow: (postId: number) => void,
-    urlAvatar?: string,
 ) {
     const [currentPage, setCurrentPage] = React.useState<number>(INITIAL_CURRENT_PAGE);
 
@@ -44,7 +43,7 @@ export default function useScrollFetchngPost(
     }, [currentPage, isFetchingPostList, lodaing]);
 
     React.useEffect(() => {
-        if (me && me.pinnedPostId > 0 && !userPosts) {
+        if (me && me.pinnedPostId && me.pinnedPostId > 0 && !userPosts) {
             getPostById(me.pinnedPostId, true);
         }
     }, []);
@@ -74,7 +73,6 @@ export default function useScrollFetchngPost(
             {lodaing.postion === EPositionLoading.UP && lodaing.isLoading && <PostSkeleton marginBottom="16px" />}
             {userPosts && (
                 <PostList
-                    urlAvatar={urlAvatar}
                     posts={userPosts}
                     onEditPost={toggleEditPost}
                     onPostIdShow={handlePostIdShow}

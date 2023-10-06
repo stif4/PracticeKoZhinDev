@@ -6,24 +6,34 @@ export interface ISubscriptions {
     nickname: string;
     updateTime: string;
     createTime: string;
-    avatarId: number;
-    pinnedPostId: number;
-    description: string;
+    avatarId: number | null;
+    pinnedPostId: number | null;
+    description: string | null;
 }
 
 export interface IUser {
-    id: number;
+    avatarId: number | null;
+    createTime: Date;
+    description: string | null;
     firstName: string;
+    id: number;
     lastName: string;
     nickname: string;
-    phone: string;
-    email: string;
+    pinnedPostId: number | null;
     updateTime: Date;
-    createTime: Date;
-    avatarId: number;
-    pinnedPostId: number;
-    description: string;
+}
+
+export interface IUserById extends IUser {
+    phone: string | null;
+    email: string;
     subscriptions: ISubscriptions[];
+}
+
+export interface IUsersFetchQuery {
+    page: number;
+    lastName?: string;
+    firstName?: string;
+    nickname?: string;
 }
 
 //----// Auth //----//
@@ -66,13 +76,13 @@ export interface ICreator {
     firstName: string;
     lastName: string;
     nickname: string;
-    phone: string;
+    phone: string | null;
     email: string;
     updateTime: Date;
     createTime: Date;
-    avatarId: number;
-    pinnedPostId: number;
-    description: string;
+    avatarId: number | null;
+    pinnedPostId: number | null;
+    description: string | null;
 }
 
 export interface IPost {

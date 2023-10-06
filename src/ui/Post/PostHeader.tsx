@@ -3,26 +3,29 @@ import {toast} from 'react-toastify';
 import {useDeletePostMutation} from '../../store/api/postApi';
 import {IPostTransform} from '../../store/api/types';
 import {usePinPostMutation, useUnpinPostMutation} from '../../store/api/userApi';
-import {getMe} from '../../store/features/userSuncks';
-import {useAppSelector} from '../../store/store';
+import {IInformationBlock, IItem} from '../types/types';
+import useFetchUserWithAwatar from '../../hooks/useFetchUserWithAwatar';
 import Avatar from '../Avatar';
 import PopUp from '../Pop-up';
-import {IInformationBlock, IItem} from '../types/types';
 
 interface PostHeaderProps {
-    urlAvatar?: string;
     informationBlock?: IInformationBlock;
     postTransformed: IPostTransform;
     onEditPost?: (post: IPostTransform) => void;
 }
 
-export default function PostHeader({postTransformed, informationBlock, urlAvatar, onEditPost}: PostHeaderProps) {
+export default function PostHeader({postTransformed, informationBlock, onEditPost}: PostHeaderProps) {
     const [deletePost, {isError: isErrorDelete, isSuccess: isSuccessDelete}] = useDeletePostMutation();
     const [pinPost, {isError: isErrorPinPost, isSuccess: isSuccessPinPost}] = usePinPostMutation();
     const [unpinPost, {isError: isErrorUnPinPost, isSuccess: isSuccessUnPinPost}] = useUnpinPostMutation();
 
-    const me = useAppSelector(getMe());
-    const isMyPost = Boolean(me && postTransformed.creatorId === me.id);
+    const {
+        isLoadingAvatar,
+        avatar,
+        isMe: isMyPost,
+        me,
+    } = useFetchUserWithAwatar(postTransformed.creatorId, postTransformed.creator);
+
     const isPinPost = Boolean(me && postTransformed.id === me.pinnedPostId);
 
     const handleDelete = () => {
@@ -73,7 +76,8 @@ export default function PostHeader({postTransformed, informationBlock, urlAvatar
         <div className="Post__header">
             <Avatar
                 informationBlock={informationBlock}
-                urlImg={urlAvatar}
+                urlImg={avatar}
+                isLoading={isLoadingAvatar}
                 withInformationBlock
                 size={50}
             />
