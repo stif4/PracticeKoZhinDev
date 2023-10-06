@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import useScrollFetchngPost from '../../hooks/useScrollFetcingPost';
 import {logOut, getUrlAvatar, getMe} from '../../store/features/userSuncks';
@@ -14,6 +15,7 @@ import useShowPostById from './hooks/useShowPostById';
 import './Profile';
 
 export default function Profile() {
+    const navigate = useNavigate();
     const me = useAppSelector(getMe());
     const {urlAvatar, loading: isLoadingAvatar} = useAppSelector(getUrlAvatar());
 
@@ -45,6 +47,10 @@ export default function Profile() {
             toast('Что то пошло ни так', {type: 'error'});
             console.log(error);
         }
+    };
+
+    const handleClickSubscribes = () => {
+        navigate('/user/subscriptions');
     };
 
     const itemsMenu: IItem[] = [
@@ -80,6 +86,7 @@ export default function Profile() {
                                     <Button
                                         label="Мои подписки"
                                         className="Button__main_empty Button__main_empty_medium"
+                                        onClick={handleClickSubscribes}
                                     />
                                     <Button
                                         label="Создать пост"
