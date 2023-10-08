@@ -3,6 +3,7 @@ import coockiesService from '../service/coockies.service';
 import {useRefreshMutation} from '../store/api/authApi';
 import {getUrlAvatar, getMe, parseAvatar} from '../store/features/userSuncks';
 import {useAppDispatch, useAppSelector} from '../store/store';
+import Loader from '../ui/Loader';
 
 interface IAppLoader {
     children: React.ReactNode;
@@ -41,7 +42,7 @@ function AppLoader({children}: IAppLoader) {
     }, [me?.avatarId]);
 
     if (isLoading || (coockiesService().getRefreshtoken() && !me)) {
-        return <div>...Loading</div>;
+        return <Loader />;
     }
 
     return <>{children}</>;
