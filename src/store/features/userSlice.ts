@@ -20,11 +20,16 @@ interface IIsEditPost {
     id: number | null;
     isLoading: boolean;
 }
+interface ILastLikedPost {
+    id: number | null;
+    isLiked: boolean ;
+}
 interface IUserState {
     user: IUserById | null;
     avatar: IURLAvatar;
     userPosts: IUserPosts;
     isEditPost: IIsEditPost;
+    lastLikedPost: ILastLikedPost;
 }
 
 const initialState: IUserState = {
@@ -32,6 +37,7 @@ const initialState: IUserState = {
     avatar: {urlAvatar: undefined, loading: false},
     isEditPost: {id: null, isLoading: false},
     userPosts: {userPosts: null, lodaing: {isLoading: false, postion: EPositionLoading.DOWN}, isAll: false},
+    lastLikedPost: {id: null, isLiked: false},
 };
 
 export const userSlice = createSlice({
@@ -118,6 +124,10 @@ export const userSlice = createSlice({
         postDelite: (state, action: PayloadAction<number>) => {
             state.userPosts.userPosts = state.userPosts.userPosts && state.userPosts.userPosts?.filter((post) => post.id !== action.payload);
         },
+        setLastLikedPost: (state, action: PayloadAction<ILastLikedPost>) => {
+            state.lastLikedPost.id = action.payload.id;
+            state.lastLikedPost.isLiked = action.payload.isLiked;
+        },
     },
 });
 
@@ -137,5 +147,6 @@ export const {
     setPinPost,
     editPost,
     failedEditPost,
+    setLastLikedPost,
     pendingEditPost,
 } = userSlice.actions;

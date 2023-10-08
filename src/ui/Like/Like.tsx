@@ -17,9 +17,17 @@ export default function Like({count, isLiked, postId}: ILikeProps) {
     const [toggleLike, {data, isSuccess}] = useToggleLikeMutation();
     const onKeyPress = () => {};
 
+    React.useEffect(() => {
+        setIsLike(isLiked);
+    }, [isLiked]);
+
+    React.useEffect(() => {
+        setCountLikes(count);
+    }, [count]);
+
     const handleToggleLike = async () => {
         try {
-            await toggleLike(postId);
+            await toggleLike({postId, isLiked: !isLike});
         } catch (error) {
             console.log(error);
         }

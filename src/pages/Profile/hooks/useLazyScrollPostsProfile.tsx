@@ -1,15 +1,15 @@
 import React from 'react';
-import {useGetMyPostsQuery, useLazyGetPostByIdQuery} from '../store/api/postApi';
-import {EPositionLoading, IPostTransform, IUser} from '../store/api/types';
-import {getMyPosts} from '../store/features/userSuncks';
-import {useAppDispatch, useAppSelector} from '../store/store';
-import PostSkeleton from '../ui/Post/PostSkeleton';
-import PostList from '../ui/Post';
-import {resetMyPosts, setPinPost} from '../store/features/userSlice';
+import {useGetMyPostsQuery, useLazyGetPostByIdQuery} from '../../../store/api/postApi';
+import {EPositionLoading, IPostTransform, IUser} from '../../../store/api/types';
+import {getMyPosts} from '../../../store/features/userSuncks';
+import {useAppDispatch, useAppSelector} from '../../../store/store';
+import PostSkeleton from '../../../ui/Post/PostSkeleton';
+import PostList from '../../../ui/Post';
+import {resetMyPosts, setPinPost} from '../../../store/features/userSlice';
 
 const INITIAL_CURRENT_PAGE = 1;
 
-export default function useScrollFetchngPost(
+export default function useLazyScrollPostsProfile(
     me: IUser | null,
     toggleEditPost: (post: IPostTransform) => any,
     handlePostIdShow: (postId: number) => void,

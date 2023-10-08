@@ -8,7 +8,7 @@
         flex-direction: column;
         margin-bottom: 40px;
 
-        &_mTop{
+        &_mTop {
             margin-top: 24px;
         }
     }
@@ -35,4 +35,8 @@
 
 .postPage__Post__clickArea {
     cursor: default;
+}
+
+.postPage__Post__text {
+    -webkit-line-clamp: inherit;
 }

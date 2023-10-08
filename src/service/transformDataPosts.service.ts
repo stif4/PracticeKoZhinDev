@@ -17,22 +17,24 @@ export default function transformDataPosts() {
 
     const getTransformDataPosts = async (posts: IPost[]) => {
         const postsTransformed = await Promise.all(
-            posts.map(async (post) => {
-                const urlimg = post.imageId ? await getUrlImg(post.imageId) : undefined;
-                return {
-                    id: post.id,
-                    title: post.title,
-                    text: post.text,
-                    creatorId: post.creatorId,
-                    likesCount: post.likesCount,
-                    isLiked: post.isLiked,
-                    creator: JSON.parse(JSON.stringify(post.creator)),
-                    tags: [...post.tags],
-                    imageUrl: urlimg,
-                    createTime: transformDate(post.createTime),
-                    updateTime: transformDate(post.updateTime),
-                };
-            }),
+            posts
+                .filter((post) => post.id && post.creatorId && post)
+                .map(async (post) => {
+                    const urlimg = post.imageId ? await getUrlImg(post.imageId) : undefined;
+                    return {
+                        id: post.id,
+                        title: post.title,
+                        text: post.text,
+                        creatorId: post.creatorId,
+                        likesCount: post.likesCount,
+                        isLiked: post.isLiked,
+                        creator: JSON.parse(JSON.stringify(post.creator)),
+                        tags: [...post.tags],
+                        imageUrl: urlimg,
+                        createTime: transformDate(post.createTime),
+                        updateTime: transformDate(post.updateTime),
+                    };
+                }),
         );
         return postsTransformed;
     };

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import useScrollFetchngPost from '../../hooks/useScrollFetcingPost';
+import useLazyScrollPostsProfile from './hooks/useLazyScrollPostsProfile';
 import {logOut, getUrlAvatar, getMe} from '../../store/features/userSuncks';
 import {useAppDispatch, useAppSelector} from '../../store/store';
 import Button from '../../ui/Button';
@@ -37,7 +37,7 @@ export default function Profile() {
     const {getPostByIdModal, handlePostIdShow} = useShowPostById();
 
     /* Get PostList with LazyScroll*/
-    const {getPosts, userPosts: posts} = useScrollFetchngPost(me, handleEditPost, handlePostIdShow);
+    const {getPosts, userPosts: posts} = useLazyScrollPostsProfile(me, handleEditPost, handlePostIdShow);
 
     /* ---------------- */
     const handleLogOut = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '../Card';
 import Like from '../Like';
 import TagList from '../Tag';
-import {IPostTransform} from '../../store/api/types';
+import {IPostTransform, ITag} from '../../store/api/types';
 import {IInformationBlock} from '../types/types';
 import {useAppSelector} from '../../store/store';
 import {getIsEditPost} from '../../store/features/userSuncks';
@@ -15,6 +15,7 @@ interface IPostProps {
     postTransformed: IPostTransform;
     onEditPost?: (post: IPostTransform) => void;
     onPostIdShow?: (post: number) => void;
+    onClickTag?: (tag: ITag) => void;
     withoutCard?: boolean;
     imgPostSqueeze?: boolean;
     prefixClass?: string;
@@ -24,7 +25,16 @@ interface IPostProps {
 const CLASS_POST_IMG = 'Post__img';
 const CLASS_POST_IMG_SQUEEZE = 'Post__img Post__img_squeeze';
 
-export default function Post({isPostPage, postTransformed, imgPostSqueeze, withoutCard, onPostIdShow, prefixClass = '', ...other}: IPostProps) {
+export default function Post({
+    isPostPage,
+    postTransformed,
+    imgPostSqueeze,
+    withoutCard,
+    onPostIdShow,
+    onClickTag,
+    prefixClass = '',
+    ...other
+}: IPostProps) {
     const {isLoading: isLoadingEditPost, id: idEditPost} = useAppSelector(getIsEditPost());
 
     const getPaddingCard = () => {
@@ -81,11 +91,14 @@ export default function Post({isPostPage, postTransformed, imgPostSqueeze, witho
                         )}
 
                         <h2 className={`Post__title ${prefixClass}Post__title`}>{postTransformed.title}</h2>
-                        <p className="Post__text">{postTransformed.text}</p>
+                        <p className={`Post__text ${prefixClass}Post__text`}>{postTransformed.text}</p>
                     </div>
 
                     <div className="Post__tegs">
-                        <TagList tags={postTransformed.tags} />
+                        <TagList
+                            tags={postTransformed.tags}
+                            onClick={onClickTag}
+                        />
                     </div>
 
                     <div className="Post__bottom">

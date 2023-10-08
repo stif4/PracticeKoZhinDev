@@ -6,7 +6,7 @@ import {ICreateComment} from '../../shared/Forms/CommentForm/CommentForm';
 import {TCreateInput} from '../../shared/Forms/CreatePostForm/CreatePostFrorm';
 import {TEditInput} from '../../shared/Forms/EditPostForm/EditPostForm';
 import {normalizationTags} from '../../utils/tagsNormalization';
-import {editPost, postDelite, postLiked} from '../features/userSlice';
+import {editPost, postDelite, postLiked, setLastLikedPost} from '../features/userSlice';
 import {setPosts} from '../features/userSuncks';
 import {IComment, IErrorResponse, IPost, IPostById, IPostTransform, IPostTransformById, ITag, ITagNormolaized} from './types';
 
@@ -29,11 +29,21 @@ export const postApi = createApi({
     }),
     tagTypes: ['Post'],
     endpoints: (builder) => ({
-        getPosts: builder.query<IPostTransform[], {page: number; userId?: number}>({
-            query({page, userId}) {
-                const withUser = userId || '';
+        getPosts: builder.query<IPostTransform[], {page: number; userId?: number; tags?: string}>({
+            query({page, userId, tags}) {
+                const getParams = () => {
+                    const baseQuery = `?page=${page}&pageSize=5`;
+                    if (tags) {
+                        return `${baseQuery}&tags=${tags}`;
+                    }
+                    if (userId) {
+                        return `${baseQuery}&userId=${userId}`;
+                    }
+                    return baseQuery;
+                };
+
                 return {
-                    url: `${URL_POST.DEFUALT}?page=${page}&pageSize=5&userId=${withUser}`,
+                    url: `${URL_POST.DEFUALT}${getParams()}`,
                     credentials: 'include',
                 };
             },
@@ -207,10 +217,10 @@ export const postApi = createApi({
                 }
             },
         }),
-        toggleLike: builder.mutation<{likesCount: number}, number>({
-            query(id) {
+        toggleLike: builder.mutation<{likesCount: number}, {postId: number; isLiked: boolean}>({
+            query({postId}) {
                 return {
-                    url: URL_POST.LIKEPOST(id),
+                    url: URL_POST.LIKEPOST(postId),
                     method: 'POST',
                     credentials: 'include',
                 };
@@ -219,7 +229,8 @@ export const postApi = createApi({
                 if (args) {
                     try {
                         const {data} = await queryFulfilled;
-                        dispatch(postLiked({id: args, likesCount: data.likesCount}));
+                        dispatch(postLiked({id: args.postId, likesCount: data.likesCount}));
+                        dispatch(setLastLikedPost({id: args.postId, isLiked: args.isLiked}));
                     } catch (error) {
                         console.log(error);
                     }

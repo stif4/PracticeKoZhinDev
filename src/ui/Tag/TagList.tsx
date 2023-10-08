@@ -5,16 +5,18 @@ import './TagList.scss';
 
 interface ITagListProps {
     tags: ITag[];
+    onClick?: (tag: ITag) => void;
 }
 
-export default function TagList({tags}: ITagListProps) {
+export default function TagList({tags, onClick}: ITagListProps) {
     return (
         <div className="TagList">
             <div className="TagList__container">
                 {tags.map((tag) => (
                     <Tag
-                        label={tag.title}
+                        tag={tag}
                         key={tag.title}
+                        onClick={onClick}
                     />
                 ))}
             </div>

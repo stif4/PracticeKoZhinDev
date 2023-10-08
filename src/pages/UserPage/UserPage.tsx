@@ -6,7 +6,7 @@ import InformationUser from '../../ui/InformationUser';
 import PostList from '../../ui/Post';
 import PostSkeleton from '../../ui/Post/PostSkeleton';
 import {IInformationBlock} from '../../ui/types/types';
-import useLazyScrollPosts from './hooks/useLazyScrollPosts';
+import useLazyScrollPosts from '../../hooks/useLazyScrollPosts';
 import useSubscribeUser from '../../ui/SubscribeUser/hooks/useSubscribeUser';
 import useShowPostById from '../Profile/hooks/useShowPostById';
 import BackButton from '../../ui/Button/BackButton/BackButton';

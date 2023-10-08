@@ -1,5 +1,5 @@
 import React from 'react';
-import {IPostTransform} from '../../store/api/types';
+import {IPostTransform, ITag} from '../../store/api/types';
 import Post from './Post';
 import './PostList.scss';
 
@@ -8,9 +8,10 @@ interface IPostListProps {
     withInformationBlock?: boolean;
     onEditPost?: (post: IPostTransform) => void;
     onPostIdShow?: (postId: number) => void;
+    onClickTag?: (tag: ITag) => void;
 }
 
-export default function PostList({posts, withInformationBlock, onEditPost, onPostIdShow}: IPostListProps) {
+export default function PostList({posts, withInformationBlock, onEditPost, onPostIdShow, onClickTag}: IPostListProps) {
     const getInformationBlock = (post: IPostTransform) => {
         if (withInformationBlock) {
             const {firstName, lastName, nickname} = post.creator;
@@ -33,6 +34,7 @@ export default function PostList({posts, withInformationBlock, onEditPost, onPos
                         postTransformed={post}
                         onEditPost={onEditPost}
                         onPostIdShow={onPostIdShow}
+                        onClickTag={onClickTag}
                     />
                 ))}
             </div>

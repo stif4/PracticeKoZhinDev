@@ -70,3 +70,4 @@ export const getMe = () => (state: RootState) => state.userState.user;
 export const getUrlAvatar = () => (state: RootState) => state.userState.avatar;
 export const getMyPosts = () => (state: RootState) => state.userState.userPosts;
 export const getIsEditPost = () => (state: RootState) => state.userState.isEditPost;
+export const getLastLikedPost = () => (state: RootState) => state.userState.lastLikedPost;

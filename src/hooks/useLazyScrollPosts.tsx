@@ -1,14 +1,18 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
-import {useGetPostsQuery} from '../../../store/api/postApi';
-import {IPostTransform} from '../../../store/api/types';
+import {useGetPostsQuery} from '../store/api/postApi';
+import {IPostTransform} from '../store/api/types';
+import {getLastLikedPost} from '../store/features/userSuncks';
 
 const INITIAL_CURRENT_PAGE = 1;
 
-export default function useLazyScrollPosts(userId: number) {
+export default function useLazyScrollPosts(userId?: number, tags?: string) {
     const [posts, setPosts] = React.useState<IPostTransform[] | null>(null);
     const [currentPage, setCurrentPage] = React.useState<number>(INITIAL_CURRENT_PAGE);
     const [isAll, setIsAll] = React.useState<boolean>(false);
+
+    const {id: idPostLiked, isLiked} = useSelector(getLastLikedPost());
 
     const {
         isLoading: isLoadingPostsSlice,
@@ -16,7 +20,17 @@ export default function useLazyScrollPosts(userId: number) {
         isSuccess: isSuccessPostsSlice,
         isError: isErrorPostsSlice,
         isFetching: isFetchingPostsSlice,
-    } = useGetPostsQuery({userId, page: currentPage});
+    } = useGetPostsQuery({userId, tags, page: currentPage});
+
+    const resetPosts = () => {
+        setPosts(null);
+        setCurrentPage(INITIAL_CURRENT_PAGE);
+        setIsAll(false);
+    };
+
+    React.useEffect(() => {
+        resetPosts();
+    }, [tags]);
 
     React.useEffect(() => {
         const onScroll = () => {
@@ -30,6 +44,21 @@ export default function useLazyScrollPosts(userId: number) {
             document.removeEventListener('scroll', onScroll);
         };
     }, [currentPage, isFetchingPostsSlice]);
+
+    React.useEffect(() => {
+        if (posts) {
+            const newPosts = posts.map((post) => {
+                if (post.id === idPostLiked) {
+                    if (isLiked) {
+                        return {...JSON.parse(JSON.stringify(post)), likesCount: post.likesCount + 1, isLiked: true};
+                    }
+                    return {...JSON.parse(JSON.stringify(post)), likesCount: post.likesCount - 1, isLiked: false};
+                }
+                return {...JSON.parse(JSON.stringify(post))};
+            });
+            setPosts(newPosts);
+        }
+    }, [idPostLiked, isLiked]);
 
     React.useEffect(() => {
         if (postsSlice && postsSlice.length) {
@@ -51,5 +80,5 @@ export default function useLazyScrollPosts(userId: number) {
         }
     }, [isErrorPostsSlice]);
 
-    return {posts, isLoading: isFetchingPostsSlice};
+    return {posts, isLoading: isFetchingPostsSlice, resetPosts};
 }

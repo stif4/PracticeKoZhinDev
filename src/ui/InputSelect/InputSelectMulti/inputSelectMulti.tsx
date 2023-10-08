@@ -7,7 +7,7 @@ const INPUTSELECTMULTI_CLASSPEFIX_ERROR = 'InputSelectMulti_main_error';
 
 interface CustomeSelectProps {
     children: React.ReactNode;
-    label: string;
+    label?: string;
     error?: boolean;
 }
 
@@ -21,7 +21,7 @@ export default function InputSelectMulti<OptionType, GroupType extends GroupBase
     return (
         <div className="InputSelectMulti">
             <div className="InputSelectMulti__container">
-                <div className="InputSelectMulti__label">{label}</div>
+                {label && <div className="InputSelectMulti__label">{label}</div>}
                 <div className="InputSelectMulti__positionContainer">
                     <Select
                         isMulti

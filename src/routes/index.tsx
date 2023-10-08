@@ -3,6 +3,7 @@ import {createBrowserRouter} from 'react-router-dom';
 import {ROUTE_AUTH, ROUTE_HOME, ROUTE_NEWS, ROUTE_REGISTER, ROUTE_SUBSCRIPTIONS, ROUTE_USER} from '../constants/routes';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import ErrorPage from '../pages/ErrorPage';
+import NewsPage from '../pages/News';
 import PostPage from '../pages/PostPage';
 import Profile from '../pages/Profile';
 import SubscriptionsPage from '../pages/Subscriptions';
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <></>,
+                        element: <NewsPage />,
                     },
                     {
                         path: ':id',
